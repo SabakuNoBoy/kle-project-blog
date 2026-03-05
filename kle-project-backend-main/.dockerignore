@@ -1,0 +1,9 @@
+/vendor
+/node_modules
+/.git
+/.env
+/storage/*.key
+/phpunit.xml
+/public/hot
+/public/storage
+/storage/app/private/livewire-tmp
