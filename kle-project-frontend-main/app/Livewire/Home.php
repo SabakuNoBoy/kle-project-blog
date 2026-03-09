@@ -80,7 +80,8 @@ class Home extends Component
             $this->posts = [];
         } else {
             $this->error = '';
-            $this->posts = $response['data'] ?? [];
+            // New format: { message, data: { items: [...], meta: {...} } }
+            $this->posts = $response['data']['items'] ?? [];
         }
     }
 

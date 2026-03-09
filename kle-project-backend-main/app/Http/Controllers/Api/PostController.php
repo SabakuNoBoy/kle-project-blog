@@ -21,7 +21,15 @@ class PostController extends Controller
         try {
             $posts = $this->postService->index($request->only(['search', 'category', 'author_id', 'date']));
 
-            return ApiResponse::success(PostResource::collection($posts)->response()->getData(true));
+            return ApiResponse::success([
+                'items' => PostResource::collection($posts)->resolve(),
+                'meta' => [
+                    'total' => $posts->total(),
+                    'per_page' => $posts->perPage(),
+                    'current_page' => $posts->currentPage(),
+                    'last_page' => $posts->lastPage(),
+                ],
+            ]);
         } catch (\Exception $e) {
             return ApiResponse::error('Failed to retrieve posts.', 500);
         }
