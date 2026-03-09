@@ -28,11 +28,17 @@ class PostPolicy
 
     public function update(User $user, Post $post): bool
     {
+        if ($user->hasRole('editor')) {
+            return false;
+        }
         return $user->hasRole('admin') || $post->user_id === $user->id;
     }
 
     public function delete(User $user, Post $post): bool
     {
+        if ($user->hasRole('editor')) {
+            return false;
+        }
         return $user->hasRole('admin') || $post->user_id === $user->id;
     }
 }

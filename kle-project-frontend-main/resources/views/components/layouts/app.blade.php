@@ -67,136 +67,18 @@
                     <span class="text-base font-bold text-gray-900">KLE<span class="text-red-600">Blog</span></span>
                 </a>
                 <div class="flex flex-wrap justify-center md:items-center gap-5 text-sm text-gray-500">
-                    <button @click="openModal = 'privacy'" type="button"
-                        class="hover:text-red-600 transition-colors">Gizlilik Politikası</button>
+                    <a href="/agreements/gizlilik-politikasi" wire:navigate
+                        class="hover:text-red-600 transition-colors">Gizlilik Politikası</a>
                     <span class="text-gray-200 hidden md:inline">|</span>
-                    <button @click="openModal = 'terms'" type="button"
-                        class="hover:text-red-600 transition-colors">Kullanım Koşulları</button>
+                    <a href="/agreements/kullanim-kosullari" wire:navigate
+                        class="hover:text-red-600 transition-colors">Kullanım Koşulları</a>
                     <span class="text-gray-200 hidden md:inline">|</span>
                     <p class="font-medium">&copy; {{ date('Y') }} KLE Blog. Tüm hakları saklıdır.</p>
                 </div>
             </div>
         </div>
 
-        {{-- Agreements Modals --}}
-        <template x-teleport="body">
-            <div x-show="openModal !== null" style="display: none; z-index: 99999;"
-                class="fixed inset-0 flex items-center justify-center p-4">
-                {{-- Backdrop --}}
-                <div x-show="openModal !== null" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"
-                    @click="openModal = null"></div>
-
-                {{-- Modal Box --}}
-                <div x-show="openModal !== null" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                    x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-100">
-
-                    {{-- Close Button --}}
-                    <button @click="openModal = null"
-                        class="absolute top-6 right-6 text-gray-400 hover:text-red-600 bg-gray-50 hover:bg-red-50 p-2 rounded-full transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-
-                    {{-- Privacy Content --}}
-                    <div x-show="openModal === 'privacy'">
-                        <div class="text-center mb-8">
-                            <div
-                                class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Gizlilik Politikası</h2>
-                        </div>
-                        <div
-                            class="text-gray-600 space-y-5 leading-relaxed text-left text-base bg-gray-50/50 p-6 md:p-8 rounded-2xl border border-gray-100">
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">1. Giriş</h4>
-                                <p>KLE Blog olarak kullanıcılarımızın gizliliğine son derece önem veriyoruz. Bu metin,
-                                    sitemizi ziyaret ettiğinizde, üye olduğunuzda veya içeriklerimizle etkileşime
-                                    geçtiğinizde toplanan verilerin nasıl işlendiğini ve korunduğunu açıklamaktadır.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">2. Toplanan Bilgiler</h4>
-                                <p>Platformumuza kayıt olurken sağladığınız isim, e-posta adresi gibi kişisel bilgiler
-                                    sistemimizde şifrelenerek ve güvenli veri tabanlarımızda saklanmaktadır. Ayrıca site
-                                    içi istatistikleri ve deneyiminizi geliştirmek adına IP adresiniz, kullandığınız
-                                    tarayıcı türü gibi anonim veriler analitik süreçleri için işlenebilir.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">3. Çerezler (Cookies)</h4>
-                                <p>Sitemiz, kullanıcıların tercihlerini hatırlamak, oturum durumunu korumak ve
-                                    kişiselleştirilmiş bir deneyim sunmak amacıyla çerezleri (cookies) kullanmaktadır.
-                                    Tarayıcı ayarlarınız üzerinden çerezleri dilediğiniz zaman yönetebilir veya
-                                    silebilirsiniz.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">4. Bilgilerin Paylaşımı</h4>
-                                <p>Kullanıcı verileriniz, tamamen yasal zorunluluklar veya resmi idari talepler
-                                    haricinde hiçbir üçüncü taraf şirket veya şahısla ticari/pazarlama amaçlı olarak
-                                    kesinlikle paylaşılmamaktadır.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Terms Content --}}
-                    <div x-show="openModal === 'terms'">
-                        <div class="text-center mb-8">
-                            <div
-                                class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </div>
-                            <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Kullanım Koşulları</h2>
-                        </div>
-                        <div
-                            class="text-gray-600 space-y-5 leading-relaxed text-left text-base bg-gray-50/50 p-6 md:p-8 rounded-2xl border border-gray-100">
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">1. Kabul Edilme</h4>
-                                <p>KLE Blog platformuna giriş yaparak, içerikleri okuyarak veya üyelik oluşturarak
-                                    aşağıda belirtilen şartları ve kuralları peşinen kabul etmiş olursunuz.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">2. İçerik ve Telif Hakkı</h4>
-                                <p>Platformumuzda yayınlanan her türlü makale, tasarım, görsel, logo ve kod
-                                    parçacıklarının telif hakları KLE Blog platformuna veya ilgili orijinal yazarlarına
-                                    aittir. Bu içeriklerin kaynak gösterilmeden veya izinsiz olarak başka platformlarda
-                                    kullanılması, kopyalanması veya ticari amaçla dağıtılmasına izin verilmez.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">3. Kullanıcı Davranışları</h4>
-                                <p>Platform üzerinde makale paylaşan veya yorum bırakan tüm kullanıcılar, topluluk
-                                    kurallarına uymakla yükümlüdür. Küfür, dil, din, ırk ayrımı, hakaret, nefret söylemi
-                                    ve yasal olmayan metinler/görseller paylaşmak yasaktır. Bu kurala uymayan hesaplar
-                                    önceden uyarılmaksızın kalıcı olarak platformdan uzaklaştırılır.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-2">4. Değişiklik Hakları</h4>
-                                <p>KLE Blog yönetimi, platformun sürdürülebilirliği ve yasal regülasyonlara uyum
-                                    kapsamında, önceden haber vermeksizin kullanım koşullarını, gizlilik politikalarını
-                                    ve sistem özelliklerini değiştirme hakkını her zaman saklı tutar.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
+    </footer>
     </footer>
 
     {{-- Global Modal Popup --}}

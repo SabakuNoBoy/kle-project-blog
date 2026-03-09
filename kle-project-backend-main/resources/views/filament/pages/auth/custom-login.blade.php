@@ -8,6 +8,14 @@
                 <h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white">
                     Hoş Geldiniz
                 </h2>
+
+                @if(session()->has('error'))
+                    <div class="mt-4 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                        role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Lütfen devam etmek için bir seçenek belirleyin.
                 </p>
