@@ -14,6 +14,7 @@ class PostService
     {
         try {
             $query = Post::with(['user', 'category'])
+                ->withCount(['comments' => fn($q) => $q->where('is_approved', true)])
                 ->where('is_approved', true)
                 ->latest();
 

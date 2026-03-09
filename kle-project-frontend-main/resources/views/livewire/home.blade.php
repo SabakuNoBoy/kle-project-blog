@@ -168,6 +168,13 @@
                             <span class="text-xs text-gray-400">{{ $post['user']['name'] ?? 'Yazar' }}</span>
                         </div>
                         <div class="flex items-center gap-2">
+                            {{-- Comment count badge --}}
+                            <span class="inline-flex items-center gap-1 text-[10px] text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.825L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                                {{ $post['comments_count'] ?? 0 }}
+                            </span>
                             @if(!empty($post['category']))
                                 <a href="/category/{{ $post['category']['slug'] }}" wire:navigate
                                    class="text-[10px] font-medium text-red-500 hover:text-red-700 transition-colors bg-red-50 px-2 py-0.5 rounded-full">

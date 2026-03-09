@@ -16,6 +16,7 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'image_url' => $this->image_url,
             'is_approved' => $this->is_approved,
+            'comments_count' => $this->comments_count ?? 0,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
             'user' => $this->whenLoaded('user', fn() => [
