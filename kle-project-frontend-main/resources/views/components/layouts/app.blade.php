@@ -34,6 +34,8 @@
                 {{-- Auth --}}
                 <div class="flex items-center gap-3">
                     @if(session('api_token'))
+                        <a href="/post/create" wire:navigate
+                            class="text-sm font-medium text-red-600 hover:text-red-700 transition-colors">Yazı Ekle</a>
                         <a href="/dashboard" wire:navigate
                             class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Yönetim
                             Paneli</a>
