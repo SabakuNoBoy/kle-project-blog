@@ -9,9 +9,11 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libzip-dev \
-    libicu-dev \
-    nodejs \
-    npm
+    libicu-dev
+
+# Install Node.js from NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
 

@@ -11,7 +11,7 @@ class ApiService
 
     public function __construct()
     {
-        $this->baseUrl = config('api.base_url', 'http://backend:8000/api');
+        $this->baseUrl = config('api.url', 'http://backend:8000/api');
     }
 
     public function get(string $endpoint, array $query = []): ?array
@@ -27,7 +27,8 @@ class ApiService
 
             return $response->json();
         } catch (ConnectionException) {
-            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+            $this->handleConnectionFailure();
+            return null;
         } catch (\Exception $e) {
             return ['error' => 'Beklenmeyen bir hata oluştu.'];
         }
@@ -42,7 +43,8 @@ class ApiService
 
             return $response->json();
         } catch (ConnectionException) {
-            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+            $this->handleConnectionFailure();
+            return null;
         } catch (\Exception $e) {
             return ['error' => 'Beklenmeyen bir hata oluştu.'];
         }
@@ -61,7 +63,8 @@ class ApiService
 
             return $request->post("{$this->baseUrl}/{$endpoint}", $data)->json();
         } catch (ConnectionException) {
-            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+            $this->handleConnectionFailure();
+            return null;
         } catch (\Exception $e) {
             return ['error' => 'Beklenmeyen bir hata oluştu.'];
         }
@@ -76,10 +79,26 @@ class ApiService
 
             return $response->json();
         } catch (ConnectionException) {
-            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+            $this->handleConnectionFailure();
+            return null;
         } catch (\Exception $e) {
             return ['error' => 'Beklenmeyen bir hata oluştu.'];
         }
+    }
+
+    /**
+     * Handle connection failure by redirecting to offline page.
+     */
+    protected function handleConnectionFailure(): void
+    {
+        if (request()->routeIs('offline')) {
+            return;
+        }
+
+        // Use illegal escape to bypass direct return in some contexts if needed, 
+        // but redirect()->send() is usually enough in Laravel web requests.
+        redirect()->route('offline')->send();
+        exit;
     }
 
     public function getToken(): ?string

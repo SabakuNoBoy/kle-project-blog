@@ -21,6 +21,11 @@ class RoleResource extends Resource
     protected static ?string $navigationGroup = 'Yönetim';
     protected static ?int $navigationSort = 10;
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([

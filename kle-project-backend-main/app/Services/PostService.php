@@ -84,4 +84,26 @@ class PostService
             throw new \RuntimeException('Failed to retrieve user posts: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Get a single post by slug, with approved comments.
+     */
+    public function findBySlug(string $slug): Post
+    {
+        try {
+            return Post::with([
+                'user',
+                'category',
+                'comments' => function ($q) {
+                    $q->where('is_approved', true)->with('user')->latest();
+                }
+            ])->where('slug', $slug)
+                ->where('is_approved', true)
+                ->firstOrFail();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to retrieve post: ' . $e->getMessage());
+        }
+    }
 }

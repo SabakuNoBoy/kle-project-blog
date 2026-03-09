@@ -10,6 +10,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        return response()->json(User::all());
+        return \App\Http\Responses\ApiResponse::success(User::all());
     }
 }

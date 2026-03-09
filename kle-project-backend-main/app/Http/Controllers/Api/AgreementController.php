@@ -9,10 +9,14 @@ use App\Models\Agreement;
 
 class AgreementController extends Controller
 {
+    public function __construct(private \App\Services\AgreementService $agreementService)
+    {
+    }
+
     public function show($slug)
     {
         try {
-            $agreement = Agreement::where('slug', $slug)->firstOrFail();
+            $agreement = $this->agreementService->findBySlug($slug);
             return ApiResponse::success(new AgreementResource($agreement));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
             return ApiResponse::error('Agreement not found.', 404);

@@ -10,5 +10,5 @@ return [
     | For local development without Docker, use host.docker.internal or localhost.
     |
     */
-    'base_url' => env('KLE_API_URL', 'http://backend:8000/api'),
+    'url' => env('KLE_API_URL', 'http://backend:8000/api'),
 ];

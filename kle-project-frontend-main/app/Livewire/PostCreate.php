@@ -71,6 +71,13 @@ class PostCreate extends Component
         }
 
         // If validation error from API
+        if (isset($response['errors'])) {
+            foreach ($response['errors'] as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            return;
+        }
+
         if (isset($response['message'])) {
             $this->addError('form_error', $response['message']);
             return;

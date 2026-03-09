@@ -42,10 +42,7 @@ class AuthController extends Controller
                 'token' => $result['token'],
             ], 'Login successful.');
         } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'The provided credentials are incorrect.',
-                'errors' => $e->errors(),
-            ], 422);
+            return ApiResponse::validationError($e->errors());
         } catch (\Exception $e) {
             return ApiResponse::error('Login failed. Please try again.', 500);
         }

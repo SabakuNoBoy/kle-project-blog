@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 
 class CustomLogin extends BaseLogin
 {
+    protected static string $view = 'filament.pages.auth.custom-login';
+
     public function authenticate(): ?LoginResponse
     {
         try {

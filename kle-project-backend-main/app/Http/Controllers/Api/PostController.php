@@ -38,16 +38,7 @@ class PostController extends Controller
     public function show($slug)
     {
         try {
-            $post = Post::with([
-                'user',
-                'category',
-                'comments' => function ($q) {
-                    $q->where('is_approved', true)->with('user')->latest();
-                }
-            ])->where('slug', $slug)
-                ->where('is_approved', true)
-                ->firstOrFail();
-
+            $post = $this->postService->findBySlug($slug);
             return ApiResponse::success(new PostResource($post));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
             return ApiResponse::error('Post not found.', 404);
