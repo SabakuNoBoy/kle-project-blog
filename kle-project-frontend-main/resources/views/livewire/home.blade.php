@@ -146,6 +146,20 @@
         </div>
     </div>
 
+    {{-- Category Pills (Direct Links to Category Detail Pages) --}}
+    @if(!empty($categories))
+    <div class="mb-8 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar">
+        <div class="flex gap-3 w-max">
+            @foreach($categories as $cat)
+                <a href="/category/{{ $cat['slug'] }}" wire:navigate
+                   class="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-100 shadow-sm hover:shadow-md hover:bg-red-50 hover:text-red-600 rounded-full text-sm font-medium text-gray-700 transition-all">
+                    {{ $cat['name'] }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     {{-- Pinterest-style Masonry Grid --}}
 
     {{-- Pinterest-style Masonry Grid --}}

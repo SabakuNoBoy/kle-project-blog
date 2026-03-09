@@ -26,7 +26,10 @@ class PostResource extends Resource
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->default(fn() => auth()->id())
+                    ->disabled(fn() => !auth()->user()->hasRole('admin'))
+                    ->dehydrated(),
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
@@ -42,8 +45,20 @@ class PostResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_approved')
                     ->label('Onaylandı mı?')
-                    ->default(false), // Kullanıcı oluşturduğunda varsayılan false
+                    ->default(false)
+                    ->disabled(fn() => !auth()->user()->hasRole('admin')),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (!auth()->user()->hasAnyRole(['admin', 'editor'])) {
+            $query->where('user_id', auth()->id());
+        }
+
+        return $query;
     }
 
     public static function table(Table $table): Table

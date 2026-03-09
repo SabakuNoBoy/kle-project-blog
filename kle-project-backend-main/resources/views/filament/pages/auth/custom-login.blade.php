@@ -1,14 +1,32 @@
 <x-filament-panels::page.simple>
+    <style>
+        .dark .fi-custom-heading {
+            color: #ffffff !important;
+        }
+
+        .dark .fi-custom-text {
+            color: #9ca3af !important;
+        }
+
+        .dark .fi-custom-btn-text {
+            color: #ef4444 !important;
+            border-color: #ef4444 !important;
+        }
+
+        .dark .fi-custom-btn-hover:hover {
+            background-color: rgba(127, 29, 29, 0.2) !important;
+        }
+    </style>
     <div x-data="{ showLogin: false }" class="w-full">
         <!-- Initial Options View -->
         <div x-show="!showLogin" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-95"
             x-transition:enter-end="opacity-100 transform scale-100" class="flex flex-col space-y-4">
             <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white">
+                <h2 class="text-2xl font-bold tracking-tight text-gray-950 fi-custom-heading">
                     Hoş Geldiniz
                 </h2>
-                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                <p class="mt-2 text-sm text-gray-500 fi-custom-text">
                     Lütfen devam etmek için bir seçenek belirleyin.
                 </p>
             </div>
@@ -19,7 +37,7 @@
             </a>
 
             <button @click="showLogin = true" type="button"
-                class="w-full justify-center text-center items-center gap-2 rounded-full border-2 border-red-600 bg-transparent px-4 py-3 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 transition dark:hover:bg-red-900/20">
+                class="w-full justify-center text-center items-center gap-2 rounded-full border-2 border-red-600 bg-transparent px-4 py-3 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 transition fi-custom-btn-text fi-custom-btn-hover">
                 Admin Girişi
             </button>
         </div>

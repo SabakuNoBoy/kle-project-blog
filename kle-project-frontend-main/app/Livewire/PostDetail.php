@@ -43,9 +43,7 @@ class PostDetail extends Component
             return redirect('/login');
         }
 
-        $this->validate([
-            'commentContent' => 'required|string|min:3',
-        ]);
+
 
         $response = $api->post('comments', [
             'content' => $this->commentContent,

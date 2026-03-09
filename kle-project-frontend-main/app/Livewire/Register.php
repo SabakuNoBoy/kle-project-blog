@@ -25,11 +25,7 @@ class Register extends Component
         $this->generalError = '';
         $this->resetErrorBag();
 
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
+
 
         $response = $api->post('register', [
             'name' => $this->name,

@@ -23,10 +23,7 @@ class Login extends Component
         $this->generalError = '';
         $this->resetErrorBag();
 
-        $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+
 
         $response = $api->post('login', [
             'email' => $this->email,

@@ -43,12 +43,7 @@ class PostCreate extends Component
 
     public function createPost(ApiService $api)
     {
-        $this->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'required',
-            'image' => 'nullable|image|max:2048' // 2MB Max
-        ]);
+
 
         $data = [
             'title' => $this->title,
