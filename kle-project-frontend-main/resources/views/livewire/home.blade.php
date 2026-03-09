@@ -86,7 +86,7 @@
             <a href="/post/{{ $post['slug'] }}" wire:navigate
                 class="group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 break-inside-avoid mb-4">
                 <div class="relative overflow-hidden">
-                    <img src="{{ $post['image_url'] ?? 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
+                    <img src="{{ !empty($post['image_url']) ? (str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000' . $post['image_url']) : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
                         class="w-full group-hover:scale-105 transition-transform duration-500" alt="{{ $post['title'] }}">
                 </div>
                 <div class="p-4">
@@ -124,23 +124,4 @@
         </div>
     @endif
 
-    {{-- Success Popup --}}
-    @if(session('success_popup'))
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-            x-data="{ show: true }" x-show="show">
-            <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl transform transition-all scale-100">
-                <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-3">Başarılı!</h3>
-                <p class="text-gray-600 mb-8 text-lg px-2">{{ session('success_popup') }}</p>
-                <button @click="show = false"
-                    class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-sm">
-                    Tamam
-                </button>
-            </div>
-        </div>
-    @endif
 </div>

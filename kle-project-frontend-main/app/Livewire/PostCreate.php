@@ -26,12 +26,28 @@ class PostCreate extends Component
         $this->categories = $catResponse ?? [];
     }
 
+    public function updatedImage()
+    {
+        try {
+            $this->validate([
+                'image' => 'image|max:5120',
+            ], [
+                'image.max' => 'Yüklediğiniz resim çok büyük. Lütfen en fazla 5MB boyutunda bir resim seçin.',
+                'image.image' => 'Lütfen geçerli bir resim dosyası seçin.'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->addError('image', $e->validator->errors()->first('image'));
+            $this->image = null;
+        }
+    }
+
     public function createPost(ApiService $api)
     {
         $this->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category_id' => 'required',
+            'image' => 'nullable|image|max:2048' // 2MB Max
         ]);
 
         $data = [
@@ -40,7 +56,11 @@ class PostCreate extends Component
             'category_id' => $this->category_id,
         ];
 
-        $response = $api->post('posts', $data);
+        if ($this->image) {
+            $response = $api->postMultipart('posts', $data, ['image' => $this->image]);
+        } else {
+            $response = $api->post('posts', $data);
+        }
 
         // Treat it as successful if it doesn't have an explicit 'message' indicating a 422/401
         // OR if it has an id

@@ -16,7 +16,7 @@
             <a href="/post/{{ $post['slug'] }}" wire:navigate
                 class="group block bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <div class="relative aspect-[4/3] overflow-hidden">
-                    <img src="{{ $post['image_url'] ?? 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
+                    <img src="{{ !empty($post['image_url']) ? (str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000' . $post['image_url']) : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         alt="{{ $post['title'] }}">
                 </div>

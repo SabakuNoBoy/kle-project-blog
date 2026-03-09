@@ -48,13 +48,20 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts', 'public');
+        }
 
         $post = Post::create([
             'user_id' => $request->user()->id,
             'category_id' => $request->category_id,
             'title' => $request->title,
             'content' => $request->content,
+            'image_url' => $imagePath ? '/storage/' . $imagePath : null,
             'is_approved' => false,
         ]);
 

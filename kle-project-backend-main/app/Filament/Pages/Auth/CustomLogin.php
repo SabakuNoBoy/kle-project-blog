@@ -23,9 +23,8 @@ class CustomLogin extends BaseLogin
         $data = $this->form->getState();
 
         if (!Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
-            // Translate the "credentials do not match" error to Turkish
             throw ValidationException::withMessages([
-                'data.email' => 'Girdiğiniz bilgiler kayıtlarımızla eşleşmiyor.',
+                'data.email' => 'These credentials do not match our records.',
             ]);
         }
 

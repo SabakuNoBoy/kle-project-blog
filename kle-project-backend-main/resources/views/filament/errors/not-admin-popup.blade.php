@@ -23,19 +23,20 @@
                 </svg>
             </div>
 
-            <h3 class="text-3xl font-bold text-gray-900 mb-4">Yetkisiz Erişim</h3>
-            <p class="text-gray-500 mb-8 text-base">Bu panele girmeye yetkiniz bulunmamaktadır. Lütfen yönetici hesabınızla
-                giriş yapın veya ön yüze dönün.</p>
+            <h3 class="text-3xl font-bold text-gray-900 mb-4">Unauthorized Access</h3>
+            <p class="text-gray-500 mb-8 text-base">You do not have permission to access this panel. Please login with an
+                administrator account
+                or return to the frontend.</p>
 
             <div class="flex flex-col gap-3">
                 <a href="http://localhost:8001"
                     class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 rounded-xl transition-colors text-lg">
-                    KLE Blog Ana Sayfaya Dön
+                    Return to KLE Blog Home
                 </a>
 
                 <button @click="show = false"
                     class="w-full bg-white border-2 border-gray-200 hover:bg-gray-50 text-gray-700 font-medium py-3 rounded-xl transition-colors text-lg">
-                    Farklı (Admin) Hesapla Giriş Yap
+                    Login with a Different (Admin) Account
                 </button>
             </div>
         </div>

@@ -35,7 +35,8 @@
                 <div class="flex items-center gap-3">
                     @if(session('api_token'))
                         <a href="/dashboard" wire:navigate
-                            class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Dashboard</a>
+                            class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Yönetim
+                            Paneli</a>
                         <a href="/logout" wire:navigate
                             class="text-sm text-gray-400 hover:text-red-600 transition-colors">Çıkış</a>
                     @else

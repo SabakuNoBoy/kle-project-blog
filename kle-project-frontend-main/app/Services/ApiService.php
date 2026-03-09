@@ -29,6 +29,19 @@ class ApiService
             ->json();
     }
 
+    public function postMultipart(string $endpoint, array $data = [], array $files = [])
+    {
+        $request = Http::withToken($this->getToken())->acceptJson();
+
+        foreach ($files as $key => $file) {
+            if ($file) {
+                $request->attach($key, file_get_contents($file->getRealPath()), $file->getClientOriginalName());
+            }
+        }
+
+        return $request->post("{$this->baseUrl}/{$endpoint}", $data)->json();
+    }
+
     public function put(string $endpoint, array $data = [])
     {
         return Http::withToken($this->getToken())
