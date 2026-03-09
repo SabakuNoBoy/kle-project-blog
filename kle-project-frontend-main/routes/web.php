@@ -11,16 +11,17 @@ use App\Livewire\Register;
 use App\Livewire\Dashboard;
 use App\Services\ApiService;
 
-Route::get('/', Home::class)->name('home');
 Route::get('/register', Register::class)->name('register');
 Route::get('/login', Login::class)->name('login');
 
-Route::get('/dashboard', Dashboard::class)->name('dashboard');
-Route::get('/post/create', PostCreate::class)->name('post.create');
-
-Route::get('/post/{slug}', PostDetail::class)->name('post.detail');
-Route::get('/category/{slug}', CategoryDetail::class)->name('category.detail');
-Route::get('/agreement/{slug}', AgreementDetail::class)->name('agreement.detail');
+Route::middleware(['require.token'])->group(function () {
+    Route::get('/', Home::class)->name('home');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/post/create', PostCreate::class)->name('post.create');
+    Route::get('/post/{slug}', PostDetail::class)->name('post.detail');
+    Route::get('/category/{slug}', CategoryDetail::class)->name('category.detail');
+    Route::get('/agreement/{slug}', AgreementDetail::class)->name('agreement.detail');
+});
 
 // Logout route (GET for simple nav link)
 Route::get('/logout', function (ApiService $api) {
