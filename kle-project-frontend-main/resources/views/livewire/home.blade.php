@@ -108,15 +108,19 @@
                             @endif
                         </button>
                         
-                        @foreach($authors as $author)
-                            <button wire:click="$set('selectedAuthor', '{{ $author['id'] }}'); open = false"
-                                class="text-left w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-between {{ $selectedAuthor == $author['id'] ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50' }}">
-                                {{ $author['name'] }}
-                                @if($selectedAuthor == $author['id'])
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        @if(is_array($authors))
+                            @foreach($authors as $author)
+                                @if(is_array($author) && isset($author['id']))
+                                    <button wire:click="$set('selectedAuthor', '{{ $author['id'] }}'); open = false"
+                                        class="text-left w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-between {{ $selectedAuthor == $author['id'] ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50' }}">
+                                        {{ $author['name'] ?? 'Bilinmeyen' }}
+                                        @if($selectedAuthor == $author['id'])
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        @endif
+                                    </button>
                                 @endif
-                            </button>
-                        @endforeach
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
