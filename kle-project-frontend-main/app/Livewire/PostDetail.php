@@ -17,7 +17,7 @@ class PostDetail extends Component
     public function mount($slug, ApiService $api)
     {
         $this->slug = $slug;
-        $this->isLoggedIn = $api->getToken() ? true : false;
+        $this->isLoggedIn = (bool) $api->getToken();
         $this->loadPost($api);
     }
 
@@ -25,7 +25,11 @@ class PostDetail extends Component
     {
         $response = $api->get("posts/{$this->slug}");
 
-        if (isset($response['id']) || isset($response['slug'])) {
+        // New API format: { data: {...}, message: "..." }
+        if (isset($response['data'])) {
+            $this->post = $response['data'];
+        } elseif (isset($response['id']) || isset($response['slug'])) {
+            // Fallback for old format
             $this->post = $response;
         } else {
             session()->flash('error', 'Yazı bulunamadı.');
@@ -48,11 +52,12 @@ class PostDetail extends Component
             'post_id' => $this->post['id'],
         ]);
 
-        if (isset($response['id']) || isset($response['data']['id'])) {
-            session()->flash('comment_success', 'Yorumunuz başarıyla gönderildi ve onay bekliyor.');
+        if (isset($response['data']['id'])) {
+            session()->flash('comment_success', 'Yorumunuz başarıyla gönderildi.');
             $this->commentContent = '';
+            $this->loadPost($api);
         } else {
-            $this->addError('comment_error', 'Yorum gönderilirken bir hata oluştu.');
+            $this->addError('comment_error', $response['message'] ?? 'Yorum gönderilirken bir hata oluştu.');
         }
     }
 

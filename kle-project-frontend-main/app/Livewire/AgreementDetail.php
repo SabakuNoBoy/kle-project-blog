@@ -15,7 +15,10 @@ class AgreementDetail extends Component
         $this->slug = $slug;
         $response = $api->get("agreements/{$this->slug}");
 
-        if (isset($response['id']) || isset($response['slug'])) {
+        // New API format: { data: {...}, message: "..." }
+        if (isset($response['data'])) {
+            $this->agreement = $response['data'];
+        } elseif (isset($response['id']) || isset($response['slug'])) {
             $this->agreement = $response;
         } else {
             return redirect('/');

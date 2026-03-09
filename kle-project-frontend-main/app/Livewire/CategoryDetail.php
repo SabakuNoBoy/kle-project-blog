@@ -20,7 +20,10 @@ class CategoryDetail extends Component
     {
         $response = $api->get("categories/{$this->slug}");
 
-        if (isset($response['id']) || isset($response['slug'])) {
+        // New API format: { data: {...}, message: "..." }
+        if (isset($response['data'])) {
+            $this->category = $response['data'];
+        } elseif (isset($response['id']) || isset($response['slug'])) {
             $this->category = $response;
         } else {
             session()->flash('error', 'Kategori bulunamadı.');

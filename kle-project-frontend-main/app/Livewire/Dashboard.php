@@ -23,18 +23,20 @@ class Dashboard extends Component
 
         $userResponse = $api->get('user');
 
-        // Check if unauthenticated or error
-        if (isset($userResponse['message']) || empty($userResponse)) {
+        // New API format: { data: {...}, message: "..." }
+        $userData = $userResponse['data'] ?? null;
+
+        if (!$userData || isset($userResponse['error'])) {
             $api->clearToken();
             return redirect('/login');
         }
 
-        $this->user = $userResponse['data'] ?? $userResponse;
+        $this->user = $userData;
         $this->name = $this->user['name'] ?? '';
         $this->email = $this->user['email'] ?? '';
 
         $postsResponse = $api->get('user/posts');
-        $this->posts = is_array($postsResponse) && !isset($postsResponse['message']) ? $postsResponse : [];
+        $this->posts = $postsResponse['data'] ?? [];
     }
 
     public function updateProfile(ApiService $api)
@@ -51,19 +53,18 @@ class Dashboard extends Component
 
         $response = $api->put('user', $data);
 
-        if (isset($response['user'])) {
-            $this->user = $response['user'];
+        // New format: { data: { user: {...} }, message: "..." }
+        if (isset($response['data']['id'])) {
+            $this->user = $response['data'];
             session()->flash('success', 'Profil başarıyla güncellendi.');
             $this->password = '';
             $this->password_confirmation = '';
-        } else {
-            if (isset($response['errors'])) {
-                foreach ($response['errors'] as $key => $messages) {
-                    $this->addError($key, $messages[0]);
-                }
-            } else {
-                session()->flash('error', $response['message'] ?? 'Bir hata oluştu.');
+        } elseif (isset($response['errors'])) {
+            foreach ($response['errors'] as $key => $messages) {
+                $this->addError($key, $messages[0]);
             }
+        } else {
+            session()->flash('error', $response['message'] ?? 'Bir hata oluştu.');
         }
     }
 

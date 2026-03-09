@@ -20,8 +20,12 @@ class Home extends Component
 
     public function mount(ApiService $api)
     {
-        $this->categories = $api->get('categories') ?? [];
-        $this->authors = $api->get('users') ?? [];
+        $categoriesResponse = $api->get('categories');
+        $this->categories = $categoriesResponse['data'] ?? [];
+
+        $authorsResponse = $api->get('users');
+        $this->authors = $authorsResponse['data'] ?? [];
+
         $this->loadPosts($api);
     }
 

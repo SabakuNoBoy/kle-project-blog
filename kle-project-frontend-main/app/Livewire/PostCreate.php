@@ -23,7 +23,7 @@ class PostCreate extends Component
             return redirect('/login');
         }
         $catResponse = $api->get('categories');
-        $this->categories = $catResponse ?? [];
+        $this->categories = $catResponse['data'] ?? [];
     }
 
     public function updatedImage()
