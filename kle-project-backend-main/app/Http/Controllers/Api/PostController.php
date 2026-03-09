@@ -29,9 +29,11 @@ class PostController extends Controller
         }
 
         if ($request->has('date') && !empty($request->date)) {
-            $query->whereYear('created_at', format_date_year($request->date))
-                ->whereMonth('created_at', format_date_month($request->date));
-            // As a fallback simply use like if format_date is not defined, we'll implement it simpler:
+            $dateParts = explode('-', $request->date);
+            if (count($dateParts) >= 2) {
+                $query->whereYear('created_at', $dateParts[0])
+                    ->whereMonth('created_at', $dateParts[1]);
+            }
         }
 
         return response()->json($query->paginate(10));

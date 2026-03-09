@@ -20,25 +20,31 @@
         </div>
 
         {{-- Search & Filter --}}
-        <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
+        <div class="relative z-50 flex flex-col md:flex-row items-stretch md:items-center gap-4">
             {{-- Search Bar --}}
             <div class="relative flex-1 group">
                 <input type="text" wire:model.live.debounce.300ms="search"
-                    class="w-full bg-white/90 backdrop-blur-md border border-gray-100 shadow-sm rounded-full py-2.5 pl-12 pr-4 text-center text-sm focus:ring-4 focus:ring-red-500/10 focus:border-red-500/30 transition-all hover:bg-white placeholder-gray-400"
+                    class="w-full bg-white border border-gray-100 shadow-sm rounded-full py-2.5 pl-12 pr-4 text-center text-sm focus:ring-4 focus:ring-red-500/10 focus:border-red-500/30 transition-all hover:shadow-md placeholder-gray-400"
                     placeholder="Gönderilerde ara...">
                 <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors group-hover:text-red-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
+            </div>
+
+            {{-- Date Filter --}}
+            <div class="relative shrink-0 flex items-center bg-white border border-gray-100 shadow-sm px-4 py-1.5 rounded-full hover:shadow-md transition-all group">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 group-hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                 </svg>
+                 <input type="month" wire:model.live="selectedDate" class="bg-transparent border-none text-sm font-semibold text-gray-700 py-1 focus:ring-0 cursor-pointer outline-none">
             </div>
 
             {{-- Filter Dropdown --}}
             <div class="relative shrink-0" x-data="{ open: false }">
                 <button @click="open = !open" @click.away="open = false"
-                    class="flex items-center justify-between gap-3 bg-white/90 backdrop-blur-md border border-gray-100 shadow-sm hover:shadow-md px-5 py-2.5 rounded-full text-sm font-semibold text-gray-700 transition-all hover:bg-white min-w-[160px]">
+                    class="flex items-center justify-between gap-3 bg-white backdrop-blur-md border border-gray-100 shadow-sm hover:shadow-md px-5 py-2.5 rounded-full text-sm font-semibold text-gray-700 transition-all hover:bg-white min-w-[160px]">
                     <div class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -54,7 +60,7 @@
                 <div x-show="open" 
                      x-transition.opacity.duration.200ms
                      style="display: none;"
-                     class="absolute right-0 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-20">
+                     class="absolute right-0 mt-3 w-56 bg-white backdrop-blur-xl border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-20">
                     
                     <div class="p-2 flex flex-col max-h-80 overflow-y-auto">
                         <button wire:click="setCategory(null); open = false"
@@ -81,7 +87,7 @@
             {{-- Author Dropdown --}}
             <div class="relative shrink-0" x-data="{ open: false }">
                 <button @click="open = !open" @click.away="open = false"
-                    class="flex items-center justify-between gap-3 bg-white/90 backdrop-blur-md border border-gray-100 shadow-sm hover:shadow-md px-5 py-2.5 rounded-full text-sm font-semibold text-gray-700 transition-all hover:bg-white min-w-[160px]">
+                    class="flex items-center justify-between gap-3 bg-white backdrop-blur-md border border-gray-100 shadow-sm hover:shadow-md px-5 py-2.5 rounded-full text-sm font-semibold text-gray-700 transition-all hover:bg-white min-w-[160px]">
                     <div class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -97,7 +103,7 @@
                 <div x-show="open" 
                      x-transition.opacity.duration.200ms
                      style="display: none;"
-                     class="absolute right-0 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-20">
+                     class="absolute right-0 mt-3 w-56 bg-white backdrop-blur-xl border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-20">
                     
                     <div class="p-2 flex flex-col max-h-80 overflow-y-auto">
                         <button wire:click="$set('selectedAuthor', null); open = false"
@@ -125,13 +131,7 @@
                 </div>
             </div>
 
-            {{-- Date Filter --}}
-            <div class="relative shrink-0 flex items-center bg-white/90 backdrop-blur-md border border-gray-100 shadow-sm px-4 py-1.5 rounded-full hover:shadow-md transition-all group">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 group-hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                 </svg>
-                 <input type="month" wire:model.live="selectedDate" class="bg-transparent border-none text-sm font-semibold text-gray-700 py-1 focus:ring-0 cursor-pointer outline-none">
-            </div>
+
 
         </div>
     </div>

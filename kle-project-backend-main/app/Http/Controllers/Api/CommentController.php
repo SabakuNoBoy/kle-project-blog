@@ -19,7 +19,7 @@ class CommentController extends Controller
             'user_id' => $request->user()->id,
             'post_id' => $request->post_id,
             'content' => $request->content,
-            'is_approved' => false,
+            'is_approved' => true,
         ]);
 
         return response()->json($comment, 201);
