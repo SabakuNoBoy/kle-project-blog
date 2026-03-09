@@ -14,7 +14,7 @@
             </div>
 
             <a href="{{ env('FRONTEND_URL', 'http://localhost:8001') }}"
-                class="w-full justify-center text-center items-center gap-2 rounded-full border border-transparent bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:focus:ring-2 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 transition">
+                class="w-full justify-center text-center items-center gap-2 rounded-full border border-transparent bg-red-600 px-4 py-3 text-sm font-semibold text-gray-950 dark:text-white shadow-sm hover:focus:ring-2 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 transition">
                 Siteye Dön
             </a>
 
