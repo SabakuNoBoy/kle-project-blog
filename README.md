@@ -8,6 +8,8 @@ Bu proje, Laravel tabanlı bir blog sistemidir. İçerisinde API destekli bir ba
 - **Yönetim Paneli (FilamentPHP):** Adminler için gelişmiş dashboard. Kategoriler, Yazılar, Yorumlar, Kullanıcılar ve Sözleşmeler yönetilebilir.
 - **Yetkilendirme:** Sanctum üzerinden Token bazlı kullanıcı doğrulama.
 - **Kullanıcı İşlemleri:** Livewire ile dinamik kayıt olma, giriş yapma, profil güncelleme, yazı ve yorum oluşturma özellikleri.
+- **Gelişmiş Sorgu ve Filtreleme:** API üzerinden Yazı arama (başlık) ve Kategori, Tarih, Yazar bazlı filtreleme özellikleri eklendi.
+- **SEO ve Okunabilirlik:** Yazı, Kategori ve Sözleşmeler slug üzerinden çalışır.
 - **Onay Sistemi:** Kullanıcıların oluşturduğu yazılar ve yorumlar varsayılan olarak inaktif gelir, admin onayından sonra yayınlanır.
 - **Docker:** Tek bir `docker-compose` dosyasıyla backend, frontend ve veritabanı kolayca ayağa kaldırılabilir.
 - **Responsive Tasarım:** Tailwind CSS kullanılarak her cihaza uyumlu arayüz.

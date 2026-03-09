@@ -77,6 +77,58 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Author Dropdown --}}
+            <div class="relative shrink-0" x-data="{ open: false }">
+                <button @click="open = !open" @click.away="open = false"
+                    class="flex items-center justify-between gap-3 bg-white/90 backdrop-blur-md border border-gray-100 shadow-sm hover:shadow-md px-5 py-2.5 rounded-full text-sm font-semibold text-gray-700 transition-all hover:bg-white min-w-[160px]">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Yazarlar
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 transition-transform duration-200" :class="{'rotate-180': open}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                {{-- Dropdown Menu --}}
+                <div x-show="open" 
+                     x-transition.opacity.duration.200ms
+                     style="display: none;"
+                     class="absolute right-0 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-20">
+                    
+                    <div class="p-2 flex flex-col max-h-80 overflow-y-auto">
+                        <button wire:click="$set('selectedAuthor', null); open = false"
+                            class="text-left w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-between {{ is_null($selectedAuthor) ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50' }}">
+                            Tümü
+                            @if(is_null($selectedAuthor))
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            @endif
+                        </button>
+                        
+                        @foreach($authors as $author)
+                            <button wire:click="$set('selectedAuthor', '{{ $author['id'] }}'); open = false"
+                                class="text-left w-full px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-between {{ $selectedAuthor == $author['id'] ? 'bg-red-50 text-red-600' : 'text-gray-600 hover:bg-gray-50' }}">
+                                {{ $author['name'] }}
+                                @if($selectedAuthor == $author['id'])
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                @endif
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            {{-- Date Filter --}}
+            <div class="relative shrink-0 flex items-center bg-white/90 backdrop-blur-md border border-gray-100 shadow-sm px-4 py-1.5 rounded-full hover:shadow-md transition-all group">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 group-hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                 </svg>
+                 <input type="month" wire:model.live="selectedDate" class="bg-transparent border-none text-sm font-semibold text-gray-700 py-1 focus:ring-0 cursor-pointer outline-none">
+            </div>
+
         </div>
     </div>
 

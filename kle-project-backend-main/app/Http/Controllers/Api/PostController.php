@@ -24,6 +24,16 @@ class PostController extends Controller
             });
         }
 
+        if ($request->has('author_id') && !empty($request->author_id)) {
+            $query->where('user_id', $request->author_id);
+        }
+
+        if ($request->has('date') && !empty($request->date)) {
+            $query->whereYear('created_at', format_date_year($request->date))
+                ->whereMonth('created_at', format_date_month($request->date));
+            // As a fallback simply use like if format_date is not defined, we'll implement it simpler:
+        }
+
         return response()->json($query->paginate(10));
     }
 

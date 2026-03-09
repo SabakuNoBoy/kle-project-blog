@@ -9,17 +9,31 @@ use Livewire\WithPagination;
 class Home extends Component
 {
     public $categories = [];
+    public $authors = [];
     public $posts = [];
     public $search = '';
     public $selectedCategory = null;
+    public $selectedAuthor = null;
+    public $selectedDate = null;
 
     public function mount(ApiService $api)
     {
         $this->categories = $api->get('categories') ?? [];
+        $this->authors = $api->get('users') ?? [];
         $this->loadPosts($api);
     }
 
     public function updatedSearch()
+    {
+        $this->loadPosts(app(ApiService::class));
+    }
+
+    public function updatedSelectedAuthor()
+    {
+        $this->loadPosts(app(ApiService::class));
+    }
+
+    public function updatedSelectedDate()
     {
         $this->loadPosts(app(ApiService::class));
     }
@@ -38,6 +52,14 @@ class Home extends Component
 
         if ($this->selectedCategory) {
             $query['category'] = $this->selectedCategory;
+        }
+
+        if ($this->selectedAuthor) {
+            $query['author_id'] = $this->selectedAuthor;
+        }
+
+        if ($this->selectedDate) {
+            $query['date'] = $this->selectedDate;
         }
 
         $response = $api->get('posts', $query);

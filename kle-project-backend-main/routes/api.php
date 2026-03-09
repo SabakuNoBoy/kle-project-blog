@@ -18,6 +18,7 @@ Route::get('/posts/{slug}', [PostController::class, 'show']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 Route::get('/agreements/{slug}', [AgreementController::class, 'show']);
+Route::get('/users', [App\Http\Controllers\Api\UserController::class, 'index']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
