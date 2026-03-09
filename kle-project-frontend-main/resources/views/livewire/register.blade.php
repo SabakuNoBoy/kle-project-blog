@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form wire:submit="register" class="space-y-4">
+            <form wire:submit="register" class="space-y-4" novalidate>
                 <div>
                     <label class="text-xs font-medium text-gray-500 mb-1 block">Ad Soyad</label>
                     <input type="text" wire:model="name"

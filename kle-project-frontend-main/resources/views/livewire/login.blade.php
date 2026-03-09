@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form wire:submit="login" class="space-y-4">
+            <form wire:submit="login" class="space-y-4" novalidate>
                 <div>
                     <label class="text-xs font-medium text-gray-500 mb-1 block">E-posta</label>
                     <input type="email" wire:model="email"

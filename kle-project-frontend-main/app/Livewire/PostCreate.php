@@ -28,17 +28,7 @@ class PostCreate extends Component
 
     public function updatedImage()
     {
-        try {
-            $this->validate([
-                'image' => 'image|max:5120',
-            ], [
-                'image.max' => 'Yüklediğiniz resim çok büyük. Lütfen en fazla 5MB boyutunda bir resim seçin.',
-                'image.image' => 'Lütfen geçerli bir resim dosyası seçin.'
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->addError('image', $e->validator->errors()->first('image'));
-            $this->image = null;
-        }
+        // Frontend validation removed to rely solely on backend
     }
 
     public function createPost(ApiService $api)

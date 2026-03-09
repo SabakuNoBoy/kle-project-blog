@@ -6,7 +6,7 @@
                 <p class="text-gray-500 text-sm">Düşüncelerinizi yazıya dökün ve topluluğumuzla paylaşın.</p>
             </div>
 
-            <form wire:submit="createPost" class="space-y-5">
+            <form wire:submit="createPost" class="space-y-5" novalidate>
                 <div>
                     <label class="text-xs font-medium text-gray-500 mb-1 block">Başlık</label>
                     <input type="text" wire:model="title"
