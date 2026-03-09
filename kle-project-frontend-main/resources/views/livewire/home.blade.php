@@ -147,54 +147,63 @@
     </div>
 
     {{-- Pinterest-style Masonry Grid --}}
-    <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
+
+    {{-- Pinterest-style Masonry Grid --}}
+    <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 px-2 sm:px-0">
         @foreach($posts as $post)
-            <a href="/post/{{ $post['slug'] }}" wire:navigate
-                class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 break-inside-avoid mb-4 bg-gray-900">
-
-                {{-- Image with overlays --}}
-                <div class="relative overflow-hidden">
-                    <img src="{{ !empty($post['image_url']) ? (str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000' . $post['image_url']) : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
-                        class="w-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-90 group-hover:brightness-75"
-                        alt="{{ $post['title'] }}">
-
-                    {{-- Category badge — top left overlay --}}
-                    @if(!empty($post['category']))
-                        <a href="/category/{{ $post['category']['slug'] }}" wire:navigate
-                           class="absolute top-3 left-3 z-10 text-[10px] font-semibold text-white bg-red-600/90 backdrop-blur-sm px-2.5 py-1 rounded-full hover:bg-red-700 transition-colors"
-                           @click.stop>
-                            {{ $post['category']['name'] }}
+            <div class="break-inside-avoid mb-4">
+                <div class="group relative bg-white rounded-[1.8rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100/50">
+                    
+                    {{-- Image Area --}}
+                    <div class="relative overflow-hidden p-1.5 pb-0">
+                        <a href="/post/{{ $post['slug'] }}" wire:navigate class="block relative rounded-2xl overflow-hidden aspect-post bg-gray-50">
+                            <img src="{{ !empty($post['image_url']) ? (str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000' . $post['image_url']) : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
+                                class="w-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                alt="{{ $post['title'] }}">
                         </a>
-                    @endif
 
-                    {{-- Dark gradient + title overlay at bottom --}}
-                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 pt-10 pb-3">
-                        <h3 class="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow">
-                            {{ $post['title'] }}
-                        </h3>
+                        {{-- Category Badge --}}
+                        @if(!empty($post['category']))
+                            <a href="/category/{{ $post['category']['slug'] }}" wire:navigate
+                               class="absolute top-4 left-4 z-10 text-[9px] font-black text-white bg-red-600 px-2.5 py-1 rounded-full shadow-md hover:bg-red-700 transition-colors uppercase tracking-widest leading-none">
+                                {{ $post['category']['name'] }}
+                            </a>
+                        @endif
                     </div>
-                </div>
 
-                {{-- Author row below image --}}
-                <div class="flex items-center justify-between px-3 py-2 bg-white border-t border-gray-100">
-                    <div class="flex items-center gap-1.5">
-                        <div class="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-[9px] font-bold text-red-600 shrink-0">
-                            {{ strtoupper(substr($post['user']['name'] ?? 'U', 0, 1)) }}
+                    {{-- Content Area --}}
+                    <div class="px-4 pb-4 pt-2">
+                        <a href="/post/{{ $post['slug'] }}" wire:navigate class="block mb-2">
+                            <h3 class="text-[14px] font-bold text-gray-900 leading-[1.3] group-hover:text-red-600 transition-colors line-clamp-2">
+                                {{ $post['title'] }}
+                            </h3>
+                        </a>
+
+                        {{-- Author & Info Row --}}
+                        <div class="flex items-center justify-between border-t border-gray-50 pt-2.5">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-[9px] font-bold text-gray-400">
+                                    {{ strtoupper(substr($post['user']['name'] ?? 'U', 0, 1)) }}
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] font-bold text-gray-600 leading-none mb-0.5">{{ $post['user']['name'] ?? 'Yazar' }}</span>
+                                    <span class="text-[9px] text-gray-300 font-medium">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M y') }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-3">
+                                {{-- Comment count --}}
+                                <div class="flex items-center gap-1 text-[10px] text-gray-300 font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.825L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                    <span>{{ $post['comments_count'] ?? 0 }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-[11px] text-gray-500 font-medium truncate max-w-[100px]">{{ $post['user']['name'] ?? 'Yazar' }}</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-[10px] text-gray-400 shrink-0">
-                        {{-- Comment count --}}
-                        <span class="inline-flex items-center gap-0.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.825L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                            </svg>
-                            {{ $post['comments_count'] ?? 0 }}
-                        </span>
-                        <span>{{ \Carbon\Carbon::parse($post['created_at'])->format('d M') }}</span>
                     </div>
                 </div>
-            </a>
+            </div>
         @endforeach
     </div>
 
