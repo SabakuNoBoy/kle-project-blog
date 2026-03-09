@@ -47,28 +47,34 @@ class PostCreate extends Component
             $response = $api->post('posts', $data);
         }
 
-        // Treat it as successful if it doesn't have an explicit 'message' indicating a 422/401
-        // OR if it has an id
-        if (isset($response['id']) || isset($response['data']['id']) || (!isset($response['message']) && is_array($response))) {
+        // Connection or generic error check
+        if (isset($response['error'])) {
+            $this->addError('form_error', $response['error']);
+            return;
+        }
+
+        // Success condition: check for ID or success status
+        if (isset($response['id']) || isset($response['data']['id']) || (isset($response['status']) && $response['status'] === 'success')) {
             session()->flash('success_popup', 'Yayınlama talebiniz alınmıştır.');
             $this->isSuccess = true;
             return redirect('/');
         }
 
-        // If validation error from API
+        // Backend validation errors (422)
         if (isset($response['errors'])) {
             foreach ($response['errors'] as $field => $messages) {
-                $this->addError($field, $messages[0]);
+                $this->addError($field, is_array($messages) ? $messages[0] : $messages);
             }
             return;
         }
 
+        // Fallback error message
         if (isset($response['message'])) {
             $this->addError('form_error', $response['message']);
             return;
         }
 
-        $this->addError('form_error', 'Yazı eklenirken sunucuda bir hata oluştu.');
+        $this->addError('form_error', 'Beklenmedik bir hata oluştu veya yazı eklenemedi.');
     }
 
     public function render()
