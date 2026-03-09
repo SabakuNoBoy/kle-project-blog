@@ -58,18 +58,24 @@
 
     {{-- Footer --}}
     <footer class="bg-white border-t border-gray-100 py-6 mt-auto shrink-0 w-full">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-center gap-6">
-            <a href="/" class="flex items-center gap-2">
-                <div
-                    class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                    K
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <a href="/" class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                        K</div>
+                    <span class="text-base font-bold text-gray-900">KLE<span class="text-red-600">Blog</span></span>
+                </a>
+                <div class="flex items-center gap-5 text-sm text-gray-500">
+                    <a href="/agreement/gizlilik-politikasi" wire:navigate
+                        class="hover:text-red-600 transition-colors">Gizlilik Politikası</a>
+                    <span class="text-gray-200">|</span>
+                    <a href="/agreement/kullanim-kosullari" wire:navigate
+                        class="hover:text-red-600 transition-colors">Kullanım Koşulları</a>
+                    <span class="text-gray-200">|</span>
+                    <p class="font-medium">&copy; {{ date('Y') }} KLE Blog. Tüm hakları saklıdır.</p>
                 </div>
-                <span class="text-base font-bold text-gray-900">KLE<span class="text-red-600">Blog</span></span>
-            </a>
-            <div class="h-5 w-px bg-gray-200"></div>
-            <p class="text-sm text-gray-500 font-medium">
-                &copy; {{ date('Y') }} KLE Blog. Tüm hakları saklıdır.
-            </p>
+            </div>
         </div>
     </footer>
 

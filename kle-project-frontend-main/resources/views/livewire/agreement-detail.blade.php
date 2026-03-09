@@ -8,7 +8,7 @@
             </div>
 
             <div class="prose prose-gray max-w-none text-gray-600 leading-relaxed">
-                {!! nl2br(e($agreement['content'])) !!}
+                {!! $agreement['content'] !!}
             </div>
 
             <div

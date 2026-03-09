@@ -7,8 +7,9 @@ use Livewire\Component;
 
 class Login extends Component
 {
-    public $email;
-    public $password;
+    public $email = '';
+    public $password = '';
+    public $generalError = '';
 
     public function mount(ApiService $api)
     {
@@ -19,6 +20,9 @@ class Login extends Component
 
     public function login(ApiService $api)
     {
+        $this->generalError = '';
+        $this->resetErrorBag();
+
         $this->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -29,12 +33,28 @@ class Login extends Component
             'password' => $this->password,
         ]);
 
-        if (isset($response['token'])) {
-            $api->setToken($response['token']);
+        // Connection or server error
+        if (isset($response['error'])) {
+            $this->generalError = $response['error'];
+            return;
+        }
+
+        // Successful login
+        if (isset($response['data']['token'])) {
+            $api->setToken($response['data']['token']);
             return redirect('/');
         }
 
-        $this->addError('email', $response['message'] ?? 'Invalid credentials. Please try again.');
+        // Backend validation errors (per-field)
+        if (isset($response['errors'])) {
+            foreach ($response['errors'] as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            return;
+        }
+
+        // General backend error
+        $this->generalError = $response['message'] ?? 'Giriş başarısız. Lütfen tekrar deneyin.';
     }
 
     public function render()

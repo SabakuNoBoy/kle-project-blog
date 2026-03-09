@@ -11,7 +11,8 @@
                 <p class="text-gray-500 text-sm mt-1">Yeni bir hesap oluşturun</p>
             </div>
 
-            @if(session('error'))
+            {{-- General error alert (connection errors, server errors) --}}
+            @if($generalError)
                 <div
                     class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100 mb-6 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24"
@@ -19,7 +20,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    {{ session('error') }}
+                    {{ $generalError }}
                 </div>
             @endif
 

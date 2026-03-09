@@ -3,91 +3,73 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\StorePostRequest;
+use App\Http\Resources\Api\PostResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\Post;
+use App\Services\PostService;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function __construct(private PostService $postService)
+    {
+    }
+
     public function index(Request $request)
     {
-        $query = Post::with(['user', 'category'])
-            ->where('is_approved', true)
-            ->latest();
+        try {
+            $posts = $this->postService->index($request->only(['search', 'category', 'author_id', 'date']));
 
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            return ApiResponse::success(PostResource::collection($posts)->response()->getData(true));
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to retrieve posts.', 500);
         }
-
-        if ($request->has('category') && !empty($request->category)) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('slug', $request->category);
-            });
-        }
-
-        if ($request->has('author_id') && !empty($request->author_id)) {
-            $query->where('user_id', $request->author_id);
-        }
-
-        if ($request->has('date') && !empty($request->date)) {
-            $dateParts = explode('-', $request->date);
-            if (count($dateParts) >= 2) {
-                $query->whereYear('created_at', $dateParts[0])
-                    ->whereMonth('created_at', $dateParts[1]);
-            }
-        }
-
-        return response()->json($query->paginate(10));
     }
 
     public function show($slug)
     {
-        $post = Post::with([
-            'user',
-            'category',
-            'comments' => function ($q) {
-                $q->where('is_approved', true)->with('user')->latest();
-            }
-        ])->where('slug', $slug)
-            ->where('is_approved', true)
-            ->firstOrFail();
+        try {
+            $post = Post::with([
+                'user',
+                'category',
+                'comments' => function ($q) {
+                    $q->where('is_approved', true)->with('user')->latest();
+                }
+            ])->where('slug', $slug)
+                ->where('is_approved', true)
+                ->firstOrFail();
 
-        return response()->json($post);
+            return ApiResponse::success(new PostResource($post));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return ApiResponse::error('Post not found.', 404);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to retrieve post.', 500);
+        }
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+        try {
+            $post = $this->postService->store(
+                $request->validated(),
+                $request->user(),
+                $request->file('image')
+            );
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('posts', 'public');
+            return ApiResponse::created(new PostResource($post), 'Post created and pending approval.');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to create post.', 500);
         }
-
-        $post = Post::create([
-            'user_id' => $request->user()->id,
-            'category_id' => $request->category_id,
-            'title' => $request->title,
-            'content' => $request->content,
-            'image_url' => $imagePath ? '/storage/' . $imagePath : null,
-            'is_approved' => false,
-        ]);
-
-        return response()->json($post, 201);
     }
 
     public function userPosts(Request $request)
     {
-        $posts = Post::with('category')
-            ->where('user_id', $request->user()->id)
-            ->latest()
-            ->get();
-
-        return response()->json($posts);
+        try {
+            $posts = $this->postService->userPosts($request->user());
+            return ApiResponse::success(PostResource::collection($posts));
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to retrieve your posts.', 500);
+        }
     }
 }
-

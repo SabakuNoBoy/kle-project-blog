@@ -1,4 +1,14 @@
 <div>
+    {{-- Error Alert --}}
+    @if($error)
+        <div class="mb-6 flex items-start gap-3 bg-red-50 border border-red-100 text-red-600 rounded-2xl px-5 py-4 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {{ $error }}
+        </div>
+    @endif
+
     {{-- Header --}}
     <div class="mb-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -152,14 +162,20 @@
                     </h3>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <div
-                                class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-semibold text-gray-500">
+                            <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-semibold text-gray-500">
                                 {{ substr($post['user']['name'] ?? 'U', 0, 1) }}
                             </div>
                             <span class="text-xs text-gray-400">{{ $post['user']['name'] ?? 'Yazar' }}</span>
                         </div>
-                        <span
-                            class="text-[10px] text-gray-300">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M') }}</span>
+                        <div class="flex items-center gap-2">
+                            @if(!empty($post['category']))
+                                <a href="/category/{{ $post['category']['slug'] }}" wire:navigate
+                                   class="text-[10px] font-medium text-red-500 hover:text-red-700 transition-colors bg-red-50 px-2 py-0.5 rounded-full">
+                                    {{ $post['category']['name'] }}
+                                </a>
+                            @endif
+                            <span class="text-[10px] text-gray-300">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M') }}</span>
+                        </div>
                     </div>
                 </div>
             </a>

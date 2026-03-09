@@ -7,10 +7,11 @@ use Livewire\Component;
 
 class Register extends Component
 {
-    public $name;
-    public $email;
-    public $password;
-    public $password_confirmation;
+    public $name = '';
+    public $email = '';
+    public $password = '';
+    public $password_confirmation = '';
+    public $generalError = '';
 
     public function mount(ApiService $api)
     {
@@ -21,6 +22,9 @@ class Register extends Component
 
     public function register(ApiService $api)
     {
+        $this->generalError = '';
+        $this->resetErrorBag();
+
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -34,12 +38,27 @@ class Register extends Component
             'password_confirmation' => $this->password_confirmation,
         ]);
 
-        if (isset($response['token'])) {
-            $api->setToken($response['token']);
+        // Connection or server error
+        if (isset($response['error'])) {
+            $this->generalError = $response['error'];
+            return;
+        }
+
+        // Successful register
+        if (isset($response['data']['token'])) {
+            $api->setToken($response['data']['token']);
             return redirect('/');
         }
 
-        $this->addError('email', $response['message'] ?? 'Registration failed. Please try again.');
+        // Backend per-field validation errors
+        if (isset($response['errors'])) {
+            foreach ($response['errors'] as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            return;
+        }
+
+        $this->generalError = $response['message'] ?? 'Kayıt başarısız. Lütfen tekrar deneyin.';
     }
 
     public function render()

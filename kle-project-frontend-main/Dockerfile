@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libzip-dev \
-    libicu-dev
+    libicu-dev \
+    nodejs \
+    npm
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
 
@@ -19,4 +21,10 @@ WORKDIR /var/www/html
 
 COPY . .
 
-# We run composer install in docker-compose command array to utilize mapped volume appropriately when developing
+# Install PHP dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Install Node.js dependencies and build frontend assets
+RUN npm install && npm run build
+
+# We run php artisan serve in docker-compose command array

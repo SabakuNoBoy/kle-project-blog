@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class ApiService
@@ -10,44 +11,75 @@ class ApiService
 
     public function __construct()
     {
-        $this->baseUrl = env('VITE_API_URL', 'http://host.docker.internal:8080/api');
+        $this->baseUrl = config('api.base_url', 'http://backend:8000/api');
     }
 
-    public function get(string $endpoint, array $query = [])
+    public function get(string $endpoint, array $query = []): ?array
     {
-        return Http::withToken($this->getToken())
-            ->acceptJson()
-            ->get("{$this->baseUrl}/{$endpoint}", $query)
-            ->json();
-    }
+        try {
+            $response = Http::withToken($this->getToken())
+                ->acceptJson()
+                ->get("{$this->baseUrl}/{$endpoint}", $query);
 
-    public function post(string $endpoint, array $data = [])
-    {
-        return Http::withToken($this->getToken())
-            ->acceptJson()
-            ->post("{$this->baseUrl}/{$endpoint}", $data)
-            ->json();
-    }
-
-    public function postMultipart(string $endpoint, array $data = [], array $files = [])
-    {
-        $request = Http::withToken($this->getToken())->acceptJson();
-
-        foreach ($files as $key => $file) {
-            if ($file) {
-                $request->attach($key, file_get_contents($file->getRealPath()), $file->getClientOriginalName());
+            if ($response->failed()) {
+                return ['error' => $response->json('message') ?? 'Request failed', 'status' => $response->status()];
             }
-        }
 
-        return $request->post("{$this->baseUrl}/{$endpoint}", $data)->json();
+            return $response->json();
+        } catch (ConnectionException) {
+            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+        } catch (\Exception $e) {
+            return ['error' => 'Beklenmeyen bir hata oluştu.'];
+        }
     }
 
-    public function put(string $endpoint, array $data = [])
+    public function post(string $endpoint, array $data = []): ?array
     {
-        return Http::withToken($this->getToken())
-            ->acceptJson()
-            ->put("{$this->baseUrl}/{$endpoint}", $data)
-            ->json();
+        try {
+            $response = Http::withToken($this->getToken())
+                ->acceptJson()
+                ->post("{$this->baseUrl}/{$endpoint}", $data);
+
+            return $response->json();
+        } catch (ConnectionException) {
+            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+        } catch (\Exception $e) {
+            return ['error' => 'Beklenmeyen bir hata oluştu.'];
+        }
+    }
+
+    public function postMultipart(string $endpoint, array $data = [], array $files = []): ?array
+    {
+        try {
+            $request = Http::withToken($this->getToken())->acceptJson();
+
+            foreach ($files as $key => $file) {
+                if ($file) {
+                    $request->attach($key, file_get_contents($file->getRealPath()), $file->getClientOriginalName());
+                }
+            }
+
+            return $request->post("{$this->baseUrl}/{$endpoint}", $data)->json();
+        } catch (ConnectionException) {
+            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+        } catch (\Exception $e) {
+            return ['error' => 'Beklenmeyen bir hata oluştu.'];
+        }
+    }
+
+    public function put(string $endpoint, array $data = []): ?array
+    {
+        try {
+            $response = Http::withToken($this->getToken())
+                ->acceptJson()
+                ->put("{$this->baseUrl}/{$endpoint}", $data);
+
+            return $response->json();
+        } catch (ConnectionException) {
+            return ['error' => 'Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.'];
+        } catch (\Exception $e) {
+            return ['error' => 'Beklenmeyen bir hata oluştu.'];
+        }
     }
 
     public function getToken(): ?string

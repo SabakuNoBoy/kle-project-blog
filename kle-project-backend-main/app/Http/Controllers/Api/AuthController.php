@@ -3,92 +3,77 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Models\User;
+use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Requests\Api\UpdateProfileRequest;
 use App\Http\Resources\Api\UserResource;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Responses\ApiResponse;
+use App\Services\AuthService;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function __construct(private AuthService $authService)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $user->assignRole('user');
-
-        return response()->json([
-            'user' => new UserResource($user),
-            'token' => $user->createToken('auth_token')->plainTextToken,
-        ]);
     }
 
-    public function login(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            $result = $this->authService->register($request->validated());
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Invalid credentials.'],
-            ]);
+            return ApiResponse::created([
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
+            ], 'User registered successfully.');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Registration failed. Please try again.', 500);
         }
+    }
 
-        return response()->json([
-            'user' => new UserResource($user),
-            'token' => $user->createToken('auth_token')->plainTextToken,
-        ]);
+    public function login(LoginRequest $request)
+    {
+        try {
+            $result = $this->authService->login($request->validated());
+
+            return ApiResponse::success([
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
+            ], 'Login successful.');
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'The provided credentials are incorrect.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Login failed. Please try again.', 500);
+        }
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logged out successfully.']);
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return ApiResponse::success(null, 'Logged out successfully.');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Logout failed.', 500);
+        }
     }
 
     public function user(Request $request)
     {
-        return new UserResource($request->user());
+        return ApiResponse::success(new UserResource($request->user()));
     }
 
-    public function update(Request $request)
+    public function update(UpdateProfileRequest $request)
     {
-        $user = $request->user();
+        try {
+            $user = $this->authService->update($request->user(), $request->validated());
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+            return ApiResponse::success(new UserResource($user), 'Profile updated successfully.');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Profile update failed.', 500);
         }
-
-        $user->save();
-
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => new UserResource($user)
-        ]);
     }
 }

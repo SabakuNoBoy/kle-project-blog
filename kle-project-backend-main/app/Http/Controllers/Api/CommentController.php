@@ -3,26 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Comment;
+use App\Http\Requests\Api\StoreCommentRequest;
+use App\Http\Resources\Api\CommentResource;
+use App\Http\Responses\ApiResponse;
+use App\Services\CommentService;
 
 class CommentController extends Controller
 {
-    public function store(Request $request)
+    public function __construct(private CommentService $commentService)
     {
-        $request->validate([
-            'content' => 'required|string|min:3',
-            'post_id' => 'required|exists:posts,id',
-        ]);
+    }
 
-        $comment = Comment::create([
-            'user_id' => $request->user()->id,
-            'post_id' => $request->post_id,
-            'content' => $request->content,
-            'is_approved' => true,
-        ]);
+    public function store(StoreCommentRequest $request)
+    {
+        try {
+            $comment = $this->commentService->store($request->validated(), $request->user());
 
-        return response()->json($comment, 201);
+            return ApiResponse::created(new CommentResource($comment), 'Comment posted successfully.');
+        } catch (\InvalidArgumentException $e) {
+            return ApiResponse::error($e->getMessage(), 422);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to post comment.', 500);
+        }
     }
 }
-

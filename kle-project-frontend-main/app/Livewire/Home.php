@@ -12,6 +12,7 @@ class Home extends Component
     public $authors = [];
     public $posts = [];
     public $search = '';
+    public $error = '';
     public $selectedCategory = null;
     public $selectedAuthor = null;
     public $selectedDate = null;
@@ -69,7 +70,14 @@ class Home extends Component
 
 
         $response = $api->get('posts', $query);
-        $this->posts = $response['data'] ?? [];
+
+        if (isset($response['error'])) {
+            $this->error = $response['error'];
+            $this->posts = [];
+        } else {
+            $this->error = '';
+            $this->posts = $response['data'] ?? [];
+        }
     }
 
     public function render()
