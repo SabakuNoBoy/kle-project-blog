@@ -24,11 +24,15 @@ class Post extends Model
                 $post->slug = Str::slug($post->title);
             }
 
-            // Extract first image from content if image_url is empty
-            if (empty($post->image_url) && !empty($post->content)) {
+            // Extract first image from content or set to null if none found
+            if (!empty($post->content)) {
                 if (preg_match('/<img.+src=["\']([^"\']+)["\']/', $post->content, $matches)) {
                     $post->image_url = $matches[1];
+                } else {
+                    $post->image_url = null;
                 }
+            } else {
+                $post->image_url = null;
             }
         });
     }

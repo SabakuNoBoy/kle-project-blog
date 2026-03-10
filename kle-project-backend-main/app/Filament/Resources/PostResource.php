@@ -33,12 +33,6 @@ class PostResource extends Resource
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
-                Forms\Components\FileUpload::make('image_url')
-                    ->label('Kapak Görseli (Opsiyonel / El ile Belirle)')
-                    ->helperText('Boş bırakılırsa içerikteki ilk resim otomatik kullanılır.')
-                    ->image()
-                    ->directory('posts')
-                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
