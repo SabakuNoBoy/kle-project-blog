@@ -4,8 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\LogsActivity;
+
 class Comment extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'user_id',
         'post_id',

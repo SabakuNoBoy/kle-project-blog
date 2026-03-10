@@ -5,8 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+use App\Traits\LogsActivity;
+
 class Post extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'user_id',
         'category_id',
@@ -23,16 +27,8 @@ class Post extends Model
             if (empty($post->slug)) {
                 $post->slug = Str::slug($post->title);
             }
-
-            // Extract first image from content or set to null if none found
-            if (!empty($post->content)) {
-                if (preg_match('/<img.+src=["\']([^"\']+)["\']/', $post->content, $matches)) {
-                    $post->image_url = $matches[1];
-                } else {
-                    $post->image_url = null;
-                }
-            } else {
-                $post->image_url = null;
+            if (empty($post->user_id) && auth()->check()) {
+                $post->user_id = auth()->id();
             }
         });
     }

@@ -23,16 +23,14 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->searchable()
-                    ->required()
-                    ->default(fn() => auth()->id())
-                    ->disabled(fn() => !auth()->user()->hasRole('admin'))
-                    ->dehydrated(),
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
+                Forms\Components\FileUpload::make('image_url')
+                    ->label('Yazı Görseli')
+                    ->image()
+                    ->directory('posts')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
