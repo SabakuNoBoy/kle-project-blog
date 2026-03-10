@@ -14,6 +14,7 @@ class Home extends Component
     public $search = '';
     public $error = '';
     public $selectedCategory = null;
+    public $selectedCategoryName = null;
     public $selectedAuthor = null;
     public $selectedDate = null;
 
@@ -23,7 +24,7 @@ class Home extends Component
         $categoriesResponse = $api->get('categories');
         $this->categories = $categoriesResponse['data'] ?? [];
 
-        $authorsResponse = $api->get('users');
+        $authorsResponse = $api->get('users', ['has_posts' => 1]);
         $this->authors = $authorsResponse['data'] ?? [];
 
         $this->loadPosts($api);
@@ -49,7 +50,19 @@ class Home extends Component
 
     public function setCategory($slug)
     {
-        $this->selectedCategory = $slug;
+        if ($this->selectedCategory === $slug) {
+            $this->selectedCategory = null;
+            $this->selectedCategoryName = null;
+        } else {
+            $this->selectedCategory = $slug;
+            if ($slug) {
+                $category = collect($this->categories)->firstWhere('slug', $slug);
+                $this->selectedCategoryName = $category['name'] ?? null;
+            } else {
+                $this->selectedCategoryName = null;
+            }
+        }
+
         $this->loadPosts(app(ApiService::class));
     }
 

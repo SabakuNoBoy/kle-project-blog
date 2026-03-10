@@ -13,8 +13,10 @@
     <div class="mb-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Keşfet</h1>
-                <p class="text-gray-500 text-sm mt-1">Teknoloji, tasarım ve yazılım hakkında güncel yazılar</p>
+                <h1 class="text-2xl font-bold text-gray-900">{{ $selectedCategoryName ?? 'Keşfet' }}</h1>
+                <p class="text-gray-500 text-sm mt-1">
+                    {{ $selectedCategoryName ? ($selectedCategoryName . ' kategorisindeki yazılar') : 'Teknoloji, tasarım ve yazılım hakkında güncel yazılar' }}
+                </p>
             </div>
 
             @if(session('api_token'))
@@ -152,10 +154,15 @@
         <div class="flex gap-3 w-max">
             @foreach($categories as $cat)
                 @if(!in_array(strtolower($cat['name'] ?? ''), ['asd', 'anc']) && !in_array(strtolower($cat['slug'] ?? ''), ['asd', 'anc']))
-                    <a href="/category/{{ $cat['slug'] }}" wire:navigate
-                       class="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-100 shadow-sm hover:shadow-md hover:bg-red-50 hover:text-red-600 rounded-full text-sm font-medium text-gray-700 transition-all">
+                    <button wire:click="setCategory('{{ $cat['slug'] }}')"
+                       class="inline-flex items-center justify-center gap-2 px-4 py-2 {{ $selectedCategory == $cat['slug'] ? 'bg-red-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-100 hover:bg-red-50 hover:text-red-600 shadow-sm' }} hover:shadow-md rounded-full text-sm font-medium transition-all">
                         {{ $cat['name'] }}
-                    </a>
+                        @if($selectedCategory == $cat['slug'])
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        @endif
+                    </button>
                 @endif
             @endforeach
         </div>
