@@ -34,7 +34,8 @@ class PostResource extends Resource
                     ->relationship('category', 'name')
                     ->required(),
                 Forms\Components\FileUpload::make('image_url')
-                    ->label('Kapak Görseli')
+                    ->label('Kapak Görseli (Opsiyonel / El ile Belirle)')
+                    ->helperText('Boş bırakılırsa içerikteki ilk resim otomatik kullanılır.')
                     ->image()
                     ->directory('posts')
                     ->columnSpanFull(),
@@ -46,7 +47,10 @@ class PostResource extends Resource
                     ->required()
                     ->unique(Post::class, 'slug', ignoreRecord: true),
                 Forms\Components\RichEditor::make('content')
+                    ->label('İçerik')
                     ->required()
+                    ->fileAttachmentsDirectory('posts')
+                    ->fileAttachmentsVisibility('public')
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_approved')
                     ->label('Onaylandı mı?')

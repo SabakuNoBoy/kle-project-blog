@@ -19,9 +19,16 @@ class Post extends Model
 
     protected static function booted()
     {
-        static::creating(function ($post) {
+        static::saving(function ($post) {
             if (empty($post->slug)) {
                 $post->slug = Str::slug($post->title);
+            }
+
+            // Extract first image from content if image_url is empty
+            if (empty($post->image_url) && !empty($post->content)) {
+                if (preg_match('/<img.+src=["\']([^"\']+)["\']/', $post->content, $matches)) {
+                    $post->image_url = $matches[1];
+                }
             }
         });
     }
