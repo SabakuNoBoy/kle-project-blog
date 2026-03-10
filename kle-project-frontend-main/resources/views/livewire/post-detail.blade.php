@@ -41,7 +41,7 @@
         {{-- Image --}}
         @if(isset($post['image_url']))
             <div class="mb-8 rounded-xl overflow-hidden bg-gray-50 flex justify-center">
-                <img src="{{ str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000' . $post['image_url'] }}" 
+                <img src="{{ str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000/storage/' . $post['image_url'] }}" 
                      class="max-h-[500px] w-full object-contain" 
                      alt="{{ $post['title'] }}">
             </div>

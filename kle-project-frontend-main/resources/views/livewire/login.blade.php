@@ -14,7 +14,7 @@
             {{-- General error alert (connection errors, server errors) --}}
             @if($generalError)
                 <div
-                    class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100 mb-6 flex items-center gap-2">
+                    class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100 mb-6 flex items-start gap-2 overflow-hidden w-full break-words">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

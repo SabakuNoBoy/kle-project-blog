@@ -29,6 +29,17 @@
                     Oluştur
                 </a>
             @endif
+            @if($generalError)
+                <div
+                    class="bg-red-50 text-red-600 text-xs p-3 rounded-lg border border-red-100 mb-6 flex items-start gap-2 overflow-hidden w-full break-words">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.825L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span>{{ $generalError }}</span>
+                </div>
+            @endif
         </div>
 
         {{-- Search & Filter --}}
@@ -180,7 +191,7 @@
                     {{-- Image Area --}}
                     <div class="relative overflow-hidden p-1.5 pb-0">
                         <a href="/post/{{ $post['slug'] }}" wire:navigate class="block relative rounded-2xl overflow-hidden aspect-post bg-gray-50">
-                            <img src="{{ !empty($post['image_url']) ? (str_starts_with($post['image_url'], 'http') ? $post['image_url'] : 'http://localhost:8000' . $post['image_url']) : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}"
+                            <img src="{{ $post['image_url'] }}"
                                 class="w-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                                 alt="{{ $post['title'] }}">
                         </a>

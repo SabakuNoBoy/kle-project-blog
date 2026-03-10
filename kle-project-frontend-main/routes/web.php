@@ -18,6 +18,7 @@ Route::get('/login', Login::class)->name('login');
 Route::middleware(['require.token'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/post/create', PostCreate::class)->name('post.create');
+    Route::get('/post/{id}/edit', \App\Livewire\PostEdit::class)->name('post.edit');
 });
 
 // Public routes

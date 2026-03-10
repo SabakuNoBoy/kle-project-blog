@@ -17,6 +17,7 @@ class Home extends Component
     public $selectedCategoryName = null;
     public $selectedAuthor = null;
     public $selectedDate = null;
+    public $generalError = '';
 
 
     public function mount(ApiService $api)

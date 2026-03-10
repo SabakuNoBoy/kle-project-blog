@@ -14,7 +14,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'slug' => $this->slug,
-            'image_url' => $this->image_url,
+            'image_url' => $this->image_url ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->image_url) : null,
             'is_approved' => $this->is_approved,
             'comments_count' => $this->comments_count ?? 0,
             'created_at' => $this->created_at?->toDateTimeString(),

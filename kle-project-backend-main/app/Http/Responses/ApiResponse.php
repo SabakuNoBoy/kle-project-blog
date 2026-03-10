@@ -29,4 +29,9 @@ class ApiResponse
     {
         return self::success($data, $message, 201);
     }
+
+    public static function validationError(array $errors = [], string $message = 'Validation failed'): JsonResponse
+    {
+        return self::error($message, 422, $errors);
+    }
 }

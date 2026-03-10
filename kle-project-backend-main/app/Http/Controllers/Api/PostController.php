@@ -62,6 +62,36 @@ class PostController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try {
+            $post = Post::findOrFail($id);
+
+            if ($post->user_id !== $request->user()->id && !$request->user()->hasRole('admin')) {
+                return ApiResponse::error('Unauthorized.', 403);
+            }
+
+            $validated = $request->validate([
+                'category_id' => 'sometimes|required|exists:categories,id',
+                'title' => 'sometimes|required|string|max:255',
+                'content' => 'sometimes|required|string',
+                'image' => 'nullable|image|max:5120',
+            ]);
+
+            $post = $this->postService->update(
+                $post,
+                $validated,
+                $request->file('image')
+            );
+
+            return ApiResponse::success(new PostResource($post), 'Post updated successfully.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return ApiResponse::error('Post not found.', 404);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to update post: ' . $e->getMessage(), 500);
+        }
+    }
+
     public function userPosts(Request $request)
     {
         try {

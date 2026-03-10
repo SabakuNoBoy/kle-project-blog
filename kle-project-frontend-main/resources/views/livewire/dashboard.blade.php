@@ -79,7 +79,10 @@
                                 <div>
                                     <h4 class="font-semibold text-gray-900 mb-1">
                                         @if($post['is_approved'])
-                                            <a href="/post/{{ $post['slug'] }}" wire:navigate class="hover:text-red-600 transition-colors">{{ $post['title'] }}</a>
+                                            <a href="/post/{{ $post['slug'] }}" wire:navigate class="hover:text-red-600 transition-colors">
+                                                <img src="{{ !empty($post['image_url']) ? $post['image_url'] : 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800' }}" alt="{{ $post['title'] }}" class="w-10 h-10 object-cover rounded-md mr-2 inline-block">
+                                                {{ $post['title'] }}
+                                            </a>
                                         @else
                                             <span class="text-gray-900">{{ $post['title'] }}</span>
                                         @endif
@@ -90,7 +93,7 @@
                                         <span>{{ $post['category']['name'] ?? 'Kategori Yok' }}</span>
                                     </div>
                                 </div>
-                                <div class="shrink-0 ml-4">
+                                <div class="shrink-0 ml-4 flex items-center gap-2">
                                     @if($post['is_approved'])
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-medium bg-green-50 text-green-600">
                                             Yayında
@@ -100,6 +103,16 @@
                                             Onay Bekliyor
                                         </span>
                                     @endif
+
+                                    <div class="flex items-center gap-1 border-l pl-2 ml-2 border-gray-100">
+                                        <a href="/post/{{ $post['id'] }}/edit" wire:navigate
+                                            class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                            title="Düzenle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

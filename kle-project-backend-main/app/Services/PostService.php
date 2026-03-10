@@ -62,7 +62,7 @@ class PostService
                 'category_id' => $data['category_id'],
                 'title' => $data['title'],
                 'content' => $data['content'],
-                'image_url' => $imagePath ? '/storage/' . $imagePath : null,
+                'image_url' => $imagePath,
                 'is_approved' => false,
             ]);
         } catch (\Exception $e) {
@@ -82,6 +82,29 @@ class PostService
                 ->get();
         } catch (\Exception $e) {
             throw new \RuntimeException('Failed to retrieve user posts: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Update an existing post.
+     */
+    public function update(Post $post, array $data, $imageFile = null): Post
+    {
+        try {
+            if ($imageFile) {
+                // Potential TODO: Delete old image
+                $imagePath = $imageFile->store('posts', 'public');
+                $data['image_url'] = $imagePath;
+            }
+
+            // If title changes, slug should be updated (handled by model booted event usually, 
+            // but let's be sure or let it re-slug if title is present)
+
+            $post->update($data);
+
+            return $post->fresh();
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to update post: ' . $e->getMessage());
         }
     }
 
