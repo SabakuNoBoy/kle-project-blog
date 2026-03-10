@@ -33,6 +33,11 @@ class PostResource extends Resource
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
+                Forms\Components\FileUpload::make('image_url')
+                    ->label('Kapak Görseli')
+                    ->image()
+                    ->directory('posts')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
@@ -65,6 +70,9 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image_url')
+                    ->label('Görsel')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
