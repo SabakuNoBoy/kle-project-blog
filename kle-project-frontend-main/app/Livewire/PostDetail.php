@@ -43,8 +43,6 @@ class PostDetail extends Component
             return redirect('/login');
         }
 
-
-
         $response = $api->post('comments', [
             'content' => $this->commentContent,
             'post_id' => $this->post['id'],
@@ -56,6 +54,19 @@ class PostDetail extends Component
             $this->loadPost($api);
         } else {
             $this->addError('comment_error', $response['message'] ?? 'Yorum gönderilirken bir hata oluştu.');
+        }
+    }
+
+    public function toggleLike(ApiService $api)
+    {
+        if (!$this->isLoggedIn) {
+            return redirect('/login');
+        }
+
+        $response = $api->post("posts/{$this->post['id']}/like");
+
+        if (isset($response['data'])) {
+            $this->loadPost($api);
         }
     }
 

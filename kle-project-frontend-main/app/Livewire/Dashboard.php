@@ -9,6 +9,11 @@ class Dashboard extends Component
 {
     public $user;
     public $posts = [];
+    public $stats = [
+        'posts_count' => 0,
+        'likes_count' => 0,
+        'comments_count' => 0,
+    ];
 
     public $name;
     public $email;
@@ -34,6 +39,7 @@ class Dashboard extends Component
         $this->user = $userData;
         $this->name = $this->user['name'] ?? '';
         $this->email = $this->user['email'] ?? '';
+        $this->stats = $this->user['stats'] ?? $this->stats;
 
         $postsResponse = $api->get('user/posts');
         $this->posts = $postsResponse['data'] ?? [];

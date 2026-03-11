@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Api\PostResource;
 
 class CategoryResource extends JsonResource
 {
@@ -14,6 +15,7 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'created_at' => $this->created_at?->toDateTimeString(),
+            'posts' => PostResource::collection($this->whenLoaded('posts')),
         ];
     }
 }

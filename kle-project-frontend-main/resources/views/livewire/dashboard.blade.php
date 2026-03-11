@@ -50,15 +50,15 @@
             {{-- Stats --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div class="bg-white p-5 rounded-xl border border-gray-100">
-                    <div class="text-2xl font-bold text-gray-900">--</div>
+                    <div class="text-2xl font-bold text-gray-900">{{ $stats['posts_count'] }}</div>
                     <div class="text-xs text-gray-400 mt-1">Toplam Yazı</div>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-gray-100">
-                    <div class="text-2xl font-bold text-gray-900">--</div>
+                    <div class="text-2xl font-bold text-gray-900">{{ $stats['likes_count'] }}</div>
                     <div class="text-xs text-gray-400 mt-1">Beğeni</div>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-gray-100">
-                    <div class="text-2xl font-bold text-gray-900">--</div>
+                    <div class="text-2xl font-bold text-gray-900">{{ $stats['comments_count'] }}</div>
                     <div class="text-xs text-gray-400 mt-1">Yorum</div>
                 </div>
             </div>
@@ -150,25 +150,25 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Ad Soyad</label>
                         <input type="text" wire:model="name"
-                            class="w-full rounded-lg border-gray-300 focus:ring-red-500 focus:border-red-500">
+                            class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
                         @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">E-posta</label>
                         <input type="email" wire:model="email"
-                            class="w-full rounded-lg border-gray-300 focus:ring-red-500 focus:border-red-500">
+                            class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
                         @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Yeni Şifre (İsteğe bağlı)</label>
                         <input type="password" wire:model="password"
-                            class="w-full rounded-lg border-gray-300 focus:ring-red-500 focus:border-red-500">
+                            class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
                         @error('password') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Yeni Şifre Tekrar</label>
                         <input type="password" wire:model="password_confirmation"
-                            class="w-full rounded-lg border-gray-300 focus:ring-red-500 focus:border-red-500">
+                            class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
                     </div>
 
                     <button type="submit"
