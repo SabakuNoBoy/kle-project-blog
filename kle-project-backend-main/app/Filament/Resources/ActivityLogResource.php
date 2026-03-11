@@ -56,15 +56,79 @@ class ActivityLogResource extends Resource
                 Tables\Columns\TextColumn::make('properties')
                     ->label('Değişiklik Özeti')
                     ->limit(50)
-                    ->tooltip(fn(Tables\Columns\TextColumn $column): ?string => $column->getState() ? json_encode($column->getState(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : null)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (!$state || !is_array($state))
+                            return null;
+
+                        $mapping = [
+                            'title' => 'Başlık',
+                            'content' => 'Açıklama',
+                            'image_url' => 'Fotoğraf',
+                            'category_id' => 'Kategori',
+                            'user_id' => 'Kullanıcı',
+                            'is_approved' => 'Onay Durumu',
+                            'slug' => 'URL Takısı',
+                            'name' => 'Ad',
+                            'email' => 'E-posta',
+                        ];
+
+                        $output = "";
+                        if (isset($state['old']) && isset($state['new'])) {
+                            foreach ($state['new'] as $key => $value) {
+                                if ($key === 'updated_at')
+                                    continue;
+                                $label = $mapping[$key] ?? $key;
+                                $oldValue = $state['old'][$key] ?? '-';
+                                $newValue = $value ?? '-';
+                                $output .= "{$label}: {$oldValue} -> {$newValue}\n";
+                            }
+                        } else {
+                            foreach ($state as $key => $value) {
+                                if (in_array($key, ['created_at', 'updated_at', 'id']))
+                                    continue;
+                                $label = $mapping[$key] ?? $key;
+                                $output .= "{$label}: " . (is_array($value) ? json_encode($value) : $value) . "\n";
+                            }
+                        }
+
+                        return $output ?: null;
+                    })
                     ->formatStateUsing(function ($state) {
                         if (!$state || !is_array($state)) {
                             return '-';
                         }
+
+                        $mapping = [
+                            'title' => 'Başlık',
+                            'content' => 'Açıklama',
+                            'image_url' => 'Fotoğraf',
+                            'category_id' => 'Kategori',
+                            'user_id' => 'Kullanıcı',
+                            'is_approved' => 'Onay Durumu',
+                            'name' => 'Ad',
+                            'email' => 'E-posta',
+                        ];
+
                         if (isset($state['old']) && isset($state['new'])) {
-                            return 'Değişim: ' . count($state['new']) . ' alan';
+                            $fields = array_keys($state['new']);
+                            $labels = [];
+                            foreach ($fields as $field) {
+                                if ($field === 'updated_at')
+                                    continue;
+                                $labels[] = ($mapping[$field] ?? $field) . ' düzenlendi';
+                            }
+                            return implode(', ', $labels) ?: 'Güncellendi';
                         }
-                        return count($state) . ' veri';
+
+                        $fields = array_keys($state);
+                        $labels = [];
+                        foreach ($fields as $field) {
+                            if (in_array($field, ['created_at', 'updated_at', 'id']))
+                                continue;
+                            $labels[] = ($mapping[$field] ?? $field) . ' eklendi';
+                        }
+                        return implode(', ', $labels) ?: 'İşlem yapıldı';
                     }),
             ])
             ->defaultSort('created_at', 'desc')
