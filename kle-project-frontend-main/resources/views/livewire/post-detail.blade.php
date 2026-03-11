@@ -49,7 +49,7 @@
 
         {{-- Content --}}
         <article class="prose prose-gray max-w-none mb-12 text-gray-600 leading-relaxed">
-            {!! nl2br(e($post['content'])) !!}
+            {!! $post['content'] !!}
         </article>
 
         {{-- Comments --}}
