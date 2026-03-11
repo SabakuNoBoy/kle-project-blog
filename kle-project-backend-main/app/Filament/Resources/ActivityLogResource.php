@@ -58,8 +58,9 @@ class ActivityLogResource extends Resource
                     ->limit(50)
                     ->tooltip(fn(Tables\Columns\TextColumn $column): ?string => $column->getState() ? json_encode($column->getState(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : null)
                     ->formatStateUsing(function ($state) {
-                        if (!$state)
+                        if (!$state || !is_array($state)) {
                             return '-';
+                        }
                         if (isset($state['old']) && isset($state['new'])) {
                             return 'Değişim: ' . count($state['new']) . ' alan';
                         }
