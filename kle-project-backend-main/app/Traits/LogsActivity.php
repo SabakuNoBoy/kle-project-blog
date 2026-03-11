@@ -28,12 +28,15 @@ trait LogsActivity
 
     protected static function logActivity($model, $action, $properties = null)
     {
+        $subjectName = $model->title ?? $model->name ?? $model->id;
+        $description = class_basename($model) . " ({$subjectName}) " . strtolower($action) . ".";
+
         ActivityLog::create([
             'user_id' => Auth::id(),
             'subject_id' => $model->id,
             'subject_type' => get_class($model),
             'action' => $action,
-            'description' => class_basename($model) . " {$action}.",
+            'description' => $description,
             'properties' => $properties,
         ]);
     }
