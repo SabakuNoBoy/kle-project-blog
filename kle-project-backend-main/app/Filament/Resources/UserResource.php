@@ -21,6 +21,8 @@ class UserResource extends Resource
     protected static ?string $navigationLabel = 'Kullanıcılar';
     protected static ?string $modelLabel = 'Kullanıcı';
     protected static ?string $pluralModelLabel = 'Kullanıcılar';
+    protected static ?string $navigationGroup = 'Yönetim';
+    protected static ?int $navigationSort = 5;
 
 
     public static function canViewAny(): bool
