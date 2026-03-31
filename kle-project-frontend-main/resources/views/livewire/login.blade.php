@@ -12,17 +12,7 @@
             </div>
 
             {{-- General error alert (connection errors, server errors) --}}
-            @if($generalError)
-                <div
-                    class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100 mb-6 flex items-start gap-2 overflow-hidden w-full break-words">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {{ $generalError }}
-                </div>
-            @endif
+
 
             <form wire:submit="login" class="space-y-4" novalidate>
                 <div>
@@ -30,7 +20,7 @@
                     <input type="email" wire:model="email"
                         class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                         placeholder="ornek@email.com">
-                    @error('email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+
                 </div>
 
                 <div>
@@ -38,7 +28,7 @@
                     <input type="password" wire:model="password"
                         class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                         placeholder="••••••••">
-                    @error('password') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+
                 </div>
 
                 <button type="submit"

@@ -62,19 +62,39 @@ class PostCreate extends Component
 
         // Backend validation errors (422)
         if (isset($response['errors'])) {
+            $firstError = '';
             foreach ($response['errors'] as $field => $messages) {
-                $this->addError($field, is_array($messages) ? $messages[0] : $messages);
+                $msg = is_array($messages) ? $messages[0] : $messages;
+                $this->addError($field, $msg);
+                if (empty($firstError)) $firstError = $msg;
             }
+            
+            $this->dispatch('swal', [
+                'title' => 'Doğrulama Hatası',
+                'text' => $firstError,
+                'icon' => 'error',
+            ]);
             return;
         }
 
         // Fallback error message
         if (isset($response['message'])) {
-            $this->addError('form_error', $response['message']);
+            $msg = $response['message'];
+            $this->addError('form_error', $msg);
+            $this->dispatch('swal', [
+                'title' => 'Hata',
+                'text' => $msg,
+                'icon' => 'error',
+            ]);
             return;
         }
 
-        $this->addError('form_error', 'Beklenmedik bir hata oluştu veya yazı eklenemedi.');
+        $this->addError('form_error', 'Beklenmedik bir hata oluştu.');
+        $this->dispatch('swal', [
+            'title' => 'Sistem Hatası',
+            'text' => 'Bilinmeyen bir hata oluştu, lütfen daha sonra tekrar deneyin.',
+            'icon' => 'error',
+        ]);
     }
 
     public function render()

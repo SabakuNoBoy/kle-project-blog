@@ -16,7 +16,12 @@ class User extends Authenticatable implements FilamentUser
 {
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        // Admin always has access, but others must be active
+        if ($this->hasRole('admin')) {
+            return true;
+        }
+
+        return $this->is_active && $this->hasAnyRole(['admin', 'editor']);
     }
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -31,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -53,6 +59,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 

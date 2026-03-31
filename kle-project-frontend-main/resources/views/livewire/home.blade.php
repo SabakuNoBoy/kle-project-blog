@@ -58,10 +58,18 @@
 
             {{-- Date Filter --}}
             <div class="relative shrink-0 flex items-center bg-white border border-gray-100 shadow-sm px-4 py-1.5 rounded-full hover:shadow-md transition-all group">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 group-hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 group-hover:text-red-500 transition-colors pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                  </svg>
-                 <input type="month" wire:model.live="selectedDate" class="bg-transparent border-none text-sm font-semibold text-gray-700 py-1 focus:ring-0 cursor-pointer outline-none">
+                 <input type="month" wire:model.live="selectedDate" onclick="this.showPicker()" class="bg-transparent border-none text-sm font-semibold text-gray-700 py-1 focus:ring-0 cursor-pointer outline-none">
+                 
+                 @if($selectedDate)
+                    <button wire:click="$set('selectedDate', null)" class="ml-1 text-gray-400 hover:text-red-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                 @endif
             </div>
 
             {{-- Filter Dropdown --}}

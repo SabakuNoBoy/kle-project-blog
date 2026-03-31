@@ -19,10 +19,6 @@ class CommentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function canViewAny(): bool
-    {
-        return auth()->user()->hasRole('admin');
-    }
 
     public static function form(Form $form): Form
     {
@@ -30,10 +26,13 @@ class CommentResource extends Resource
             ->schema([
                 Forms\Components\Select::make('post_id')
                     ->relationship('post', 'title')
-                    ->disabled(),
+                    ->required()
+                    ->searchable(),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->disabled(),
+                    ->required()
+                    ->default(fn() => auth()->id())
+                    ->searchable(),
                 Forms\Components\Textarea::make('content')
                     ->required(),
                 Forms\Components\Toggle::make('is_approved')

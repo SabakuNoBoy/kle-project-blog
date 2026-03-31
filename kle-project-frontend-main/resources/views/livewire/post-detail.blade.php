@@ -82,21 +82,12 @@
                         class="w-full border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                         rows="3" placeholder="Yorumunuzu yazın..."></textarea>
 
-                    @error('commentContent') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                    @error('comment_error') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-
-                    @if(session()->has('comment_success'))
-                        <div class="bg-green-50 text-green-600 text-sm p-3 rounded-lg border border-green-100 mt-3">
-                            {{ session('comment_success') }}
-                        </div>
-                    @else
-                        <div class="mt-3 flex justify-end">
-                            <button type="submit"
-                                class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
-                                Yorum Yap
-                            </button>
-                        </div>
-                    @endif
+                    <div class="mt-3 flex justify-end">
+                        <button type="submit"
+                            class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Yorum Yap
+                        </button>
+                    </div>
                 </form>
             @else
                 <div class="bg-gray-50 rounded-xl p-6 text-center mb-8 border border-gray-100">

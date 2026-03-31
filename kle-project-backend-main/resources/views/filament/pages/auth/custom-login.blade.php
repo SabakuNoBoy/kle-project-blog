@@ -54,4 +54,44 @@
             </x-filament-panels::form>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('livewire:navigated', () => {
+            initSwal();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSwal();
+        });
+
+        window.addEventListener('swal', (event) => {
+            const data = event.detail[0] || event.detail;
+            fireSwal(data);
+        });
+
+        function initSwal() {
+            @if(session()->has('swal'))
+                fireSwal(@json(session('swal')));
+            @endif
+        }
+
+        function fireSwal(data) {
+            Swal.fire({
+                title: data.title,
+                text: data.text,
+                icon: data.icon,
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: 'Tamam',
+                customClass: {
+                    popup: 'rounded-2xl',
+                    confirmButton: 'rounded-xl px-8 py-3'
+                }
+            }).then((result) => {
+                if (result.isConfirmed && data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            });
+        }
+    </script>
 </x-filament-panels::page.simple>

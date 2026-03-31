@@ -25,7 +25,7 @@ Route::middleware(['require.token'])->group(function () {
 Route::get('/', Home::class)->name('home');
 Route::get('/post/{slug}', PostDetail::class)->name('post.detail');
 Route::get('/category/{slug}', CategoryDetail::class)->name('category.detail');
-Route::get('/agreement/{slug}', AgreementDetail::class)->name('agreement.detail');
+Route::get('/agreements/{slug}', AgreementDetail::class)->name('agreement.detail');
 
 // Logout route (GET for simple nav link)
 Route::get('/logout', function (ApiService $api) {

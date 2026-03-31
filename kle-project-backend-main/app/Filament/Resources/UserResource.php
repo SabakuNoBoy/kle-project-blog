@@ -22,6 +22,7 @@ class UserResource extends Resource
     protected static ?string $modelLabel = 'Kullanıcı';
     protected static ?string $pluralModelLabel = 'Kullanıcılar';
 
+
     public static function canViewAny(): bool
     {
         return auth()->user()->hasRole('admin');
@@ -31,23 +32,36 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255)
-                    ->unique(ignoreRecord: true),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->dehydrated(fn($state) => filled($state))
-                    ->required(fn(string $context): bool => $context === 'create')
-                    ->maxLength(255),
-                Forms\Components\Select::make('roles')
-                    ->multiple()
-                    ->relationship('roles', 'name')
-                    ->preload(),
+                Forms\Components\Section::make('Kişisel Bilgiler')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true),
+                        Forms\Components\TextInput::make('password')
+                            ->password()
+                            ->dehydrated(fn($state) => filled($state))
+                            ->required(fn(string $context): bool => $context === 'create')
+                            ->maxLength(255),
+                    ])->columns(2),
+
+                Forms\Components\Section::make('Giriş İzinleri')
+                    ->description('Kullanıcının sisteme erişim yetkilerini buradan yönetebilirsiniz.')
+                    ->schema([
+                        Forms\Components\Select::make('roles')
+                            ->multiple()
+                            ->relationship('roles', 'name')
+                            ->preload()
+                            ->label('Roller'),
+                        Forms\Components\Toggle::make('is_active')
+                            ->label('Giriş Yetkisi (Aktif mi?)')
+                            ->default(true)
+                            ->hidden(fn (?User $record) => $record?->hasRole('admin')),
+                    ])->columns(2),
             ]);
     }
 
@@ -59,6 +73,9 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Durum')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->badge()
                     ->color('info'),

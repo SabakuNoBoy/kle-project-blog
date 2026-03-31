@@ -33,10 +33,13 @@ class PostService
             }
 
             if (!empty($filters['date'])) {
-                $parts = explode('-', $filters['date']);
-                if (count($parts) >= 2) {
-                    $query->whereYear('created_at', $parts[0])
-                        ->whereMonth('created_at', $parts[1]);
+                $date = trim($filters['date']);
+                if ($date !== '') {
+                    $parts = explode('-', $date);
+                    if (count($parts) >= 2) {
+                        $query->whereYear('created_at', $parts[0])
+                            ->whereMonth('created_at', $parts[1]);
+                    }
                 }
             }
 

@@ -49,11 +49,19 @@ class PostDetail extends Component
         ]);
 
         if (isset($response['data']['id'])) {
-            session()->flash('comment_success', 'Yorumunuz başarıyla gönderildi.');
+            $this->dispatch('swal', [
+                'title' => 'Başarılı!',
+                'text' => 'Yorumunuz alındı, onay bekliyor.',
+                'icon' => 'success',
+            ]);
             $this->commentContent = '';
             $this->loadPost($api);
         } else {
-            $this->addError('comment_error', $response['message'] ?? 'Yorum gönderilirken bir hata oluştu.');
+            $this->dispatch('swal', [
+                'title' => 'Hata!',
+                'text' => $response['message'] ?? 'Yorum gönderilirken bir hata oluştu.',
+                'icon' => 'error',
+            ]);
         }
     }
 

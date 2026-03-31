@@ -39,9 +39,22 @@ class AuthService
         try {
             $user = User::where('email', $data['email'])->first();
 
-            if (!$user || !Hash::check($data['password'], $user->password)) {
+            if (!$user) {
                 throw ValidationException::withMessages([
-                    'email' => ['The provided credentials are incorrect.'],
+                    'email' => ['User not found.'],
+                ]);
+            }
+
+            if (!Hash::check($data['password'], $user->password)) {
+                throw ValidationException::withMessages([
+                    'password' => ['Incorrect password.'],
+                ]);
+            }
+
+            // Block login if user account is deactivated (Admins bypass this)
+            if (!$user->is_active && !$user->hasRole('admin')) {
+                throw ValidationException::withMessages([
+                    'email' => ['Access denied. Your account is deactivated.'],
                 ]);
             }
 

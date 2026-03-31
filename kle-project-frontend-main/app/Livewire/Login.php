@@ -44,14 +44,32 @@ class Login extends Component
 
         // Backend validation errors (per-field)
         if (isset($response['errors'])) {
+            $firstError = '';
             foreach ($response['errors'] as $field => $messages) {
-                $this->addError($field, $messages[0]);
+                $msg = is_array($messages) ? $messages[0] : $messages;
+                $this->addError($field, $msg);
+                if (empty($firstError)) {
+                    $firstError = $msg;
+                }
             }
+
+            $this->dispatch('swal', [
+                'title' => 'Giriş Hatası',
+                'text' => $firstError,
+                'icon' => 'error',
+                'redirect' => '/' // Yönlendirme eklendi
+            ]);
             return;
         }
 
         // General backend error
         $this->generalError = $response['message'] ?? 'Giriş başarısız. Lütfen tekrar deneyin.';
+        $this->dispatch('swal', [
+            'title' => 'Hata',
+            'text' => $this->generalError,
+            'icon' => 'error',
+            'redirect' => '/' // Yönlendirme eklendi
+        ]);
     }
 
     public function render()

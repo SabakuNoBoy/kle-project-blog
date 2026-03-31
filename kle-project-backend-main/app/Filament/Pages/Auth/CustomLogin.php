@@ -37,12 +37,16 @@ class CustomLogin extends BaseLogin
             (!$user->canAccessPanel(Filament::getCurrentPanel()))
         ) {
             Filament::auth()->logout();
-            session()->invalidate();
-            session()->regenerateToken();
 
-            session()->flash('admin_access_denied', true);
+            session()->flash('swal', [
+                'title' => 'Erişim Engellendi',
+                'text' => 'Giriş izniniz yok. Hesabınız dondurulmuş olabilir.',
+                'icon' => 'error',
+                'redirect' => '/admin/login'
+            ]);
 
             $this->redirect(filament()->getLoginUrl());
+
             return null;
         }
 

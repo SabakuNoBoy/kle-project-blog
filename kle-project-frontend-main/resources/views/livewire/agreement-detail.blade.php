@@ -14,7 +14,7 @@
             <div
                 class="mt-10 pt-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-xs text-gray-400">
-                    Son güncelleme: {{ \Carbon\Carbon::parse($agreement['updated_at'])->format('d M Y') }}
+                    Son güncelleme: {{ \Carbon\Carbon::parse($agreement['updated_at'] ?? $agreement['created_at'] ?? now())->format('d M Y') }}
                 </p>
             </div>
         </div>

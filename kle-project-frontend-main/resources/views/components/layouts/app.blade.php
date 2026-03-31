@@ -83,45 +83,39 @@
     </footer>
     </footer>
 
-    {{-- Global Modal Popup --}}
-    @if(session('success_popup'))
-        <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-
-            {{-- Backdrop --}}
-            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm" @click="show = false"></div>
-
-            {{-- Modal Box --}}
-            <div x-show="show" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center border border-gray-100">
-
-                <div
-                    class="w-16 h-16 mx-auto bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Başarılı!</h3>
-                <p class="text-gray-500 mb-8">{{ session('success_popup') }}</p>
-
-                <button @click="show = false"
-                    class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 rounded-xl transition-colors text-lg">
-                    Tamam
-                </button>
-            </div>
-        </div>
-    @endif
-
     @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.addEventListener('swal', event => {
+            const data = event.detail[0] || event.detail;
+            Swal.fire({
+                title: data.title,
+                text: data.text,
+                icon: data.icon,
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: 'Tamam',
+                customClass: {
+                    popup: 'rounded-2xl',
+                    confirmButton: 'rounded-xl px-8 py-3'
+                }
+            }).then((result) => {
+                if (result.isConfirmed && data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            });
+        });
+
+        // Handle legacy session success_popup if still used
+        @if(session('success_popup'))
+            Swal.fire({
+                title: 'Başarılı!',
+                text: "{{ session('success_popup') }}",
+                icon: 'success',
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: 'Tamam'
+            });
+        @endif
+    </script>
 </body>
 
 </html>

@@ -24,7 +24,7 @@ class CommentService
                 'user_id' => $user->id,
                 'post_id' => $data['post_id'],
                 'content' => $data['content'],
-                'is_approved' => true,
+                'is_approved' => false,
             ]);
         } catch (\InvalidArgumentException $e) {
             throw $e;

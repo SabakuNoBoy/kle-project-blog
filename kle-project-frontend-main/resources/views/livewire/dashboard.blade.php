@@ -131,39 +131,101 @@
                 @endif
             </div>
 
+            {{-- User Comments --}}
+            <div class="bg-white p-6 rounded-xl border border-gray-100 mb-8 shadow-sm transition-all hover:shadow-md">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 tracking-tight">Yorumlarım</h3>
+                </div>
+
+                @if(count($comments) > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($comments as $comment)
+                            <div class="p-5 bg-white border border-gray-100 rounded-2xl hover:border-red-100 hover:bg-red-50/10 transition-all duration-300 group">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="flex-1">
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1 group-hover:text-red-400 transition-colors">Makale</p>
+                                        <h4 class="font-bold text-sm text-gray-900 leading-tight">
+                                            @if($comment['post_slug'])
+                                                <a href="/post/{{ $comment['post_slug'] }}" wire:navigate class="hover:text-red-600 decoration-red-200 underline-offset-4 hover:underline">
+                                                    {{ $comment['post_title'] }}
+                                                </a>
+                                            @else
+                                                {{ $comment['post_title'] }}
+                                            @endif
+                                        </h4>
+                                    </div>
+                                    <div class="ml-4">
+                                        @if($comment['is_approved'])
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 shadow-sm">
+                                                Yayında
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 ring-1 ring-amber-100 shadow-sm animate-pulse">
+                                                Onay Bekliyor
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="relative bg-gray-50/50 p-4 rounded-xl border border-gray-100 group-hover:border-red-50 group-hover:bg-white transition-all duration-300">
+                                    <p class="text-sm text-gray-700 leading-relaxed italic">
+                                        "{{ $comment['content'] }}"
+                                    </p>
+                                </div>
+                                <div class="mt-4 flex items-center justify-between text-[10px] items-center">
+                                    <div class="flex items-center gap-1.5 text-gray-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        {{ $comment['created_at'] }}
+                                    </div>
+                                    <div class="h-1 w-1 rounded-full bg-gray-200"></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="py-16 text-center border-2 border-dashed border-gray-50 rounded-2xl bg-gray-50/30">
+                        <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-4 text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-sm font-bold text-gray-900 mb-1">Henüz Yorumunuz Yok</h4>
+                        <p class="text-xs text-gray-400 max-w-[200px] mx-auto">Okuduğunuz yazılara yorum yaparak topluluğa katılabilirsiniz.</p>
+                    </div>
+                @endif
+            </div>
+
             {{-- Profile Update Form --}}
             <div class="bg-white p-6 rounded-xl border border-gray-100">
                 <h3 class="text-lg font-bold text-gray-900 mb-4">Profil Bilgilerim</h3>
 
-                @if (session('success'))
-                    <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if (session('error'))
-                    <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">
-                        {{ session('error') }}
-                    </div>
-                @endif
+
 
                 <form wire:submit.prevent="updateProfile" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Ad Soyad</label>
                         <input type="text" wire:model="name"
                             class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
-                        @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">E-posta</label>
                         <input type="email" wire:model="email"
                             class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
-                        @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Yeni Şifre (İsteğe bağlı)</label>
                         <input type="password" wire:model="password"
                             class="w-full rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500">
-                        @error('password') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Yeni Şifre Tekrar</label>

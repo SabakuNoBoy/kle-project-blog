@@ -9,6 +9,7 @@ class Dashboard extends Component
 {
     public $user;
     public $posts = [];
+    public $comments = [];
     public $stats = [
         'posts_count' => 0,
         'likes_count' => 0,
@@ -40,6 +41,7 @@ class Dashboard extends Component
         $this->name = $this->user['name'] ?? '';
         $this->email = $this->user['email'] ?? '';
         $this->stats = $this->user['stats'] ?? $this->stats;
+        $this->comments = $this->user['comments'] ?? [];
 
         $postsResponse = $api->get('user/posts');
         $this->posts = $postsResponse['data'] ?? [];
@@ -62,15 +64,31 @@ class Dashboard extends Component
         // New format: { data: { user: {...} }, message: "..." }
         if (isset($response['data']['id'])) {
             $this->user = $response['data'];
-            session()->flash('success', 'Profil başarıyla güncellendi.');
+            $this->dispatch('swal', [
+                'title' => 'Başarılı!',
+                'text' => 'Profil bilgileriniz güncellendi.',
+                'icon' => 'success',
+            ]);
             $this->password = '';
             $this->password_confirmation = '';
         } elseif (isset($response['errors'])) {
+            $firstError = '';
             foreach ($response['errors'] as $key => $messages) {
-                $this->addError($key, $messages[0]);
+                $msg = $messages[0];
+                $this->addError($key, $msg);
+                if (empty($firstError)) $firstError = $msg;
             }
+            $this->dispatch('swal', [
+                'title' => 'Güncelleme Hatası',
+                'text' => $firstError,
+                'icon' => 'error',
+            ]);
         } else {
-            session()->flash('error', $response['message'] ?? 'Bir hata oluştu.');
+            $this->dispatch('swal', [
+                'title' => 'Hata!',
+                'text' => $response['message'] ?? 'Profil güncellenirken bir hata oluştu.',
+                'icon' => 'error',
+            ]);
         }
     }
 

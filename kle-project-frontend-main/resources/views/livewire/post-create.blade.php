@@ -12,7 +12,7 @@
                     <input type="text" wire:model="title"
                         class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                         placeholder="Yazı başlığı...">
-                    @error('title') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+
                 </div>
 
                 <div>
@@ -24,7 +24,7 @@
                             <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
                         @endforeach
                     </select>
-                    @error('category_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+
                 </div>
 
                 <div>
@@ -32,20 +32,13 @@
                     <textarea wire:model="content"
                         class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                         rows="8" placeholder="Yazınızı buraya yazın..."></textarea>
-                    @error('content') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-xs font-medium text-gray-500 block">Kapak Görseli</label>
                     
-                    @error('image')
-                        <div class="bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-100 flex items-center gap-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Resim eklenemedi veya çok büyük: {{ $message }}</span>
-                        </div>
-                    @enderror
+
 
                     <div class="relative border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-red-300 transition-colors @error('image') border-red-300 bg-red-50 @enderror">
                         <input type="file" wire:model.live="image"
@@ -77,11 +70,7 @@
                     </div>
                 @endif
 
-                @error('form_error')
-                    <div class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
-                        {{ $message }}
-                    </div>
-                @enderror
+
 
                 <button type="submit"
                     class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg text-sm font-medium transition-colors">

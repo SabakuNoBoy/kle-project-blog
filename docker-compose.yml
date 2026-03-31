@@ -31,7 +31,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-password}
     volumes:
       - ./kle-project-backend-main:/var/www/html
-    command: sh -c "composer install --no-interaction && php artisan serve --host=0.0.0.0 --port=8000"
+    command: sh -c "composer install --no-interaction && php -d upload_max_filesize=128M -d post_max_size=128M -d memory_limit=512M -d max_execution_time=600 artisan serve --host=0.0.0.0 --port=8000"
 
   frontend:
     build:

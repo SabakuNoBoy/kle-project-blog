@@ -24,8 +24,20 @@ class UserResource extends JsonResource
             'stats' => [
                 'posts_count' => $this->posts()->count(),
                 'likes_count' => PostLike::whereIn('post_id', $this->posts()->pluck('id'))->count(),
-                'comments_count' => Comment::whereIn('post_id', $this->posts()->pluck('id'))->count(),
+                'comments_count' => $this->comments()->count(),
             ],
+            'comments' => $this->comments()
+                ->with('post:id,title,slug')
+                ->latest()
+                ->get()
+                ->map(fn($comment) => [
+                    'id' => $comment->id,
+                    'post_title' => $comment->post->title ?? 'Bilinmeyen Yazı',
+                    'post_slug' => $comment->post->slug ?? '',
+                    'content' => $comment->content,
+                    'is_approved' => (bool) $comment->is_approved,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ]),
         ];
     }
 }

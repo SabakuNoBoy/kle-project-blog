@@ -30,6 +30,7 @@ class PostResource extends Resource
                     ->label('Yazı Görseli')
                     ->image()
                     ->directory('posts')
+                    ->maxSize(20480)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('title')
                     ->required()
@@ -55,7 +56,7 @@ class PostResource extends Resource
     {
         $query = parent::getEloquentQuery();
 
-        if (!auth()->user()->hasAnyRole(['admin', 'editor'])) {
+        if (!auth()->user()->hasRole('admin')) {
             $query->where('user_id', auth()->id());
         }
 

@@ -22,6 +22,11 @@ class ActivityLogResource extends Resource
 
     protected static ?string $pluralLabel = 'Sistem Kayıtları';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([]);

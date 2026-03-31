@@ -37,6 +37,11 @@ class Register extends Component
         // Connection or server error
         if (isset($response['error'])) {
             $this->generalError = $response['error'];
+            $this->dispatch('swal', [
+                'title' => 'Sistem Hatası',
+                'text' => $this->generalError,
+                'icon' => 'error',
+            ]);
             return;
         }
 
@@ -48,13 +53,26 @@ class Register extends Component
 
         // Backend per-field validation errors
         if (isset($response['errors'])) {
+            $firstError = '';
             foreach ($response['errors'] as $field => $messages) {
-                $this->addError($field, $messages[0]);
+                $msg = $messages[0];
+                $this->addError($field, $msg);
+                if (empty($firstError)) $firstError = $msg;
             }
+            $this->dispatch('swal', [
+                'title' => 'Kayıt Hatası',
+                'text' => $firstError,
+                'icon' => 'error',
+            ]);
             return;
         }
 
         $this->generalError = $response['message'] ?? 'Kayıt başarısız. Lütfen tekrar deneyin.';
+        $this->dispatch('swal', [
+            'title' => 'Hata',
+            'text' => $this->generalError,
+            'icon' => 'error',
+        ]);
     }
 
     public function render()

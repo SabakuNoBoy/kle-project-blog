@@ -21,7 +21,7 @@ class AgreementResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()->hasRole('admin');
+        return auth()->user()->hasPermissionTo('view_agreements');
     }
 
     public static function form(Form $form): Form
@@ -29,7 +29,7 @@ class AgreementResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')->required(),
-                Forms\Components\TextInput::make('slug')->required()->unique(),
+                Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
                 Forms\Components\RichEditor::make('content')->required()->columnSpanFull(),
             ]);
     }
