@@ -19,10 +19,6 @@ class AgreementResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function canViewAny(): bool
-    {
-        return auth()->user()->hasPermissionTo('view_agreements');
-    }
 
     public static function form(Form $form): Form
     {

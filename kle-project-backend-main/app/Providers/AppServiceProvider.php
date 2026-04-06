@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+
         FilamentView::registerRenderHook(
             PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
             fn(): string => View::make('filament.errors.not-admin-popup')->render(),
