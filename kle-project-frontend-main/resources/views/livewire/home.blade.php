@@ -43,7 +43,7 @@
         </div>
 
         {{-- Search & Filter --}}
-        <div class="relative z-50 flex flex-col md:flex-row items-stretch md:items-center gap-4">
+        <div class="relative z-30 flex flex-col md:flex-row items-stretch md:items-center gap-4">
             {{-- Search Bar --}}
             <div class="relative flex-1 group">
                 <input type="text" wire:model.live.debounce.300ms="search"
@@ -229,7 +229,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <span class="text-[10px] font-bold text-gray-600 leading-none mb-0.5">{{ $post['user']['name'] ?? 'Yazar' }}</span>
-                                    <span class="text-[9px] text-gray-300 font-medium">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M y') }}</span>
+                                    <span class="text-[9px] text-gray-300 font-medium">{{ \Carbon\Carbon::parse($post['created_at'])->translatedFormat('d M y') }}</span>
                                 </div>
                             </div>
                             

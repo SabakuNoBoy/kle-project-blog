@@ -88,6 +88,19 @@ class PostEdit extends Component
         $this->addError('form_error', $response['message'] ?? 'Güncelleme başarısız oldu.');
     }
 
+    public function deletePost(ApiService $api)
+    {
+        $response = $api->delete("posts/{$this->postId}");
+
+        if (isset($response['error'])) {
+            $this->addError('form_error', $response['error']);
+            return;
+        }
+
+        session()->flash('success_popup', 'Yazınız başarıyla silinmiştir.');
+        return redirect('/dashboard');
+    }
+
     public function render()
     {
         return view('livewire.post-edit')

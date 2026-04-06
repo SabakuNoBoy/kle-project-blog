@@ -132,4 +132,16 @@ class PostService
             throw new \RuntimeException('Failed to retrieve post: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Delete an existing post.
+     */
+    public function delete(Post $post): bool
+    {
+        try {
+            return $post->delete();
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to delete post: ' . $e->getMessage());
+        }
+    }
 }

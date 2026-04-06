@@ -16,7 +16,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'slug' => $this->slug,
-            'image_url' => $this->image_url ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->image_url) : null,
+            'image_url' => \Illuminate\Support\Facades\Storage::disk('public')->url($this->image_url ?: 'posts/default.svg'),
             'is_approved' => $this->is_approved,
             'likes_count' => $this->likes()->count(),
             'is_liked' => auth('sanctum')->check() ? $this->likes()->where('user_id', auth('sanctum')->id())->exists() : false,

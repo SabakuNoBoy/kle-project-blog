@@ -87,6 +87,22 @@ class ApiService
         }
     }
 
+    public function delete(string $endpoint): ?array
+    {
+        try {
+            $response = Http::withToken($this->getToken())
+                ->acceptJson()
+                ->delete("{$this->baseUrl}/{$endpoint}");
+
+            return $this->translateResponse($response->json());
+        } catch (ConnectionException) {
+            $this->handleConnectionFailure();
+            return null;
+        } catch (\Exception $e) {
+            return $this->translateResponse(['error' => 'Beklenmeyen bir hata oluştu.']);
+        }
+    }
+
     /**
      * Map English error messages to Turkish.
      */

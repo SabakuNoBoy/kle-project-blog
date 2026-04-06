@@ -30,6 +30,7 @@ class PostResource extends Resource
                     ->label('Yazı Görseli')
                     ->image()
                     ->directory('posts')
+                    ->default('posts/default.svg')
                     ->maxSize(20480)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('title')

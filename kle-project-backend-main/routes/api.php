@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::put('/posts/{id}', [PostController::class, 'update']);
     Route::post('/posts/{id}', [PostController::class, 'update']); // Sometimes useful for multipart/form-data with PUT issues
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::post('/posts/{id}/like', [\App\Http\Controllers\Api\PostLikeController::class, 'toggle']);
     Route::post('/comments', [CommentController::class, 'store']);
 });

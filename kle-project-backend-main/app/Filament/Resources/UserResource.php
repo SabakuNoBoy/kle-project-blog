@@ -61,7 +61,7 @@ class UserResource extends Resource
                             ->label('Roller'),
                         Forms\Components\Toggle::make('is_active')
                             ->label('Giriş Yetkisi (Aktif mi?)')
-                            ->default(true)
+                            ->default(false)
                             ->hidden(fn (?User $record) => $record?->hasRole('admin')),
                     ])->columns(2),
             ]);

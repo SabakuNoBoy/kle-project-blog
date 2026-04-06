@@ -101,4 +101,23 @@ class PostController extends Controller
             return ApiResponse::error('Failed to retrieve your posts.', 500);
         }
     }
+
+    public function destroy(Request $request, $id)
+    {
+        try {
+            $post = Post::findOrFail($id);
+
+            if ($post->user_id !== $request->user()->id && !$request->user()->hasRole('admin')) {
+                return ApiResponse::error('Unauthorized.', 403);
+            }
+
+            $this->postService->delete($post);
+
+            return ApiResponse::success(null, 'Post deleted successfully.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return ApiResponse::error('Post not found.', 404);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to delete post: ' . $e->getMessage(), 500);
+        }
+    }
 }

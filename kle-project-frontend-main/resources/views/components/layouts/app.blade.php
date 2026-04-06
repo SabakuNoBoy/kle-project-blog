@@ -20,7 +20,7 @@
 <body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col justify-between">
 
     {{-- Navbar --}}
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav class="sticky top-0 z-[100] bg-white/40 backdrop-blur-xl border-b border-gray-100/50 shadow-sm shadow-black/5">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex justify-between items-center h-14">
                 {{-- Logo --}}
@@ -35,12 +35,12 @@
                 <div class="flex items-center gap-3">
                     @if(session('api_token'))
                         <a href="/post/create" wire:navigate
-                            class="text-sm font-medium text-red-600 hover:text-red-700 transition-colors">Yazı Ekle</a>
+                            class="text-sm font-semibold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl transition-all">Yazı Ekle</a>
                         <a href="/dashboard" wire:navigate
-                            class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Yönetim
+                            class="text-sm font-semibold text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-xl transition-all">Yönetim
                             Paneli</a>
                         <a href="/logout" wire:navigate
-                            class="text-sm text-gray-400 hover:text-red-600 transition-colors">Çıkış</a>
+                            class="text-sm font-medium text-gray-400 hover:text-red-600 px-3 py-1.5 rounded-xl transition-colors">Çıkış</a>
                     @else
                         <a href="/login" wire:navigate
                             class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Giriş Yap</a>
